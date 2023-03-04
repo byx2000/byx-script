@@ -24,7 +24,6 @@ public class ByxScriptRunner {
     private static final String SCRIPT_SUFFIX = ".bs";
     private final List<Path> importPaths = new ArrayList<>();
     private final Map<String, Value> builtins = new HashMap<>();
-    private final Native natives = new Native();
 
     public ByxScriptRunner() {
         this(new Scanner(System.in), System.out);
@@ -38,9 +37,7 @@ public class ByxScriptRunner {
         addBuiltin("Console", new Console(printStream));
         addBuiltin("Reader", new Reader(scanner));
         addBuiltin("Reflect", Reflect.INSTANCE);
-        addBuiltin("Native", natives);
-
-        addNative("Math", Math.INSTANCE);
+        addBuiltin("Math", Math.INSTANCE);
     }
 
     /**
@@ -66,15 +63,6 @@ public class ByxScriptRunner {
      */
     void addBuiltin(String name, Value value) {
         builtins.put(name, value);
-    }
-
-    /**
-     * 添加本地变量
-     * @param name 变量名
-     * @param value 变量值
-     */
-    void addNative(String name, Value value) {
-        natives.setField(name, value);
     }
 
     // 读取并解析导入名称

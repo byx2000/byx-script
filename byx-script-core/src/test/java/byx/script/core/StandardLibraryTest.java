@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
-import static byx.script.core.util.OutputUtils.getOutput;
+import static byx.script.core.TestUtils.getOutput;
 
 public class StandardLibraryTest {
     private static final Path LIB_PATH;

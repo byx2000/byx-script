@@ -3,7 +3,6 @@ package byx.script.core;
 import org.junit.jupiter.api.Test;
 
 import static byx.script.core.TestUtils.*;
-import static byx.script.core.util.OutputUtils.getOutput;
 
 public class ByxScriptTest {
     @Test
@@ -72,10 +71,18 @@ public class ByxScriptTest {
                 obj.b -= 50
                 obj.c.d += 100
                 obj.c.e[0].m *= 10
-                                
                 Console.println(obj.a, obj.b, obj.c.d, obj.c.e[0].m)
                 """, """
                 101 150 400 100
+                """);
+        verify("""
+                var obj = {}
+                obj.a = 100
+                obj.b = 3.14
+                obj.c = 'hello'
+                Console.println(obj.a, obj.b, obj.c)
+                """, """
+                100 3.14 hello
                 """);
     }
 
