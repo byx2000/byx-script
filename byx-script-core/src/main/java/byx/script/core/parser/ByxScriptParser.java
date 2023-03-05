@@ -1,7 +1,7 @@
 package byx.script.core.parser;
 
 import byx.script.core.util.Pair;
-import byx.script.core.interpreter.InterpretException;
+import byx.script.core.interpreter.exception.InterpretException;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
@@ -228,7 +228,7 @@ public class ByxScriptParser {
 
     // 函数声明
     private static final Parser<Statement> funcDeclare = skip(function_)
-            .and(identifier.fatal())
+            .and(identifier.fatal("expected identifier"))
             .skip(lp.fatal())
             .and(idList)
             .skip(rp.fatal().and(lb.fatal()))
@@ -365,7 +365,7 @@ public class ByxScriptParser {
     private static final Parser<List<String>> imports = skip(import_).and(importName).many();
 
     // 程序
-    private static final Parser<Program> program = imports.and(stmts)
+    private static final Parser<Program> program = imports.and(stmts).end()
             .map(p -> new Program(p.getFirst(), p.getSecond()));
 
     private static String join(List<?> list) {

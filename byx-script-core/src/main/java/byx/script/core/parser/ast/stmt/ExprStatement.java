@@ -7,7 +7,7 @@ import byx.script.core.parser.ast.expr.Expr;
  * 表达式语句
  * 对表达式求值，然后直接丢弃求值结果
  */
-public class ExprStatement implements Statement {
+public class ExprStatement extends Statement {
     private final Expr expr;
 
     public ExprStatement(Expr expr) {
@@ -19,7 +19,7 @@ public class ExprStatement implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

@@ -6,7 +6,7 @@ import byx.script.core.parser.ast.expr.Expr;
 /**
  * throw语句
  */
-public class Throw implements Statement {
+public class Throw extends Statement {
     private final Expr expr;
 
     public Throw(Expr expr) {
@@ -18,7 +18,7 @@ public class Throw implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

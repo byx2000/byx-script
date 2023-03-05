@@ -5,7 +5,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 /**
  * 一元表达式
  */
-public class UnaryExpr implements Expr {
+public class UnaryExpr extends Expr {
     private final UnaryOp op;
     private final Expr e;
 
@@ -23,7 +23,7 @@ public class UnaryExpr implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

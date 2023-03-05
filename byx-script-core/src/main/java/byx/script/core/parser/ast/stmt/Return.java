@@ -6,7 +6,7 @@ import byx.script.core.parser.ast.expr.Expr;
 /**
  * 函数返回语句
  */
-public class Return implements Statement {
+public class Return extends Statement {
     private final Expr retVal;
 
     public Return(Expr retVal) {
@@ -18,7 +18,7 @@ public class Return implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

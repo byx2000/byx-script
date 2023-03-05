@@ -1,5 +1,6 @@
 package byx.script.core.interpreter;
 
+import byx.script.core.interpreter.exception.InterpretException;
 import byx.script.core.interpreter.value.Value;
 
 import java.util.HashMap;

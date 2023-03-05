@@ -5,7 +5,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 /**
  * 下标访问
  */
-public class Subscript implements Expr {
+public class Subscript extends Expr {
     private final Expr expr;
     private final Expr subscript;
 
@@ -23,7 +23,7 @@ public class Subscript implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

@@ -6,7 +6,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 /**
  * 字面量
  */
-public class Literal implements Expr {
+public class Literal extends Expr {
     private final Value value;
 
     public Literal(Value value) {
@@ -18,7 +18,7 @@ public class Literal implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

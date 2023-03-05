@@ -1,4 +1,4 @@
-package byx.script.core.interpreter;
+package byx.script.core.interpreter.exception;
 
 /**
  * 解释器异常基类

@@ -7,7 +7,7 @@ import byx.script.core.parser.ast.expr.Expr;
  * 变量声明
  * var varName = expr
  */
-public class VarDeclare implements Statement {
+public class VarDeclare extends Statement {
     private final String varName;
     private final Expr value;
 
@@ -25,7 +25,7 @@ public class VarDeclare implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

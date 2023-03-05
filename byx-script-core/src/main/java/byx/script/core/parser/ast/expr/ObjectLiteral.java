@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 对象字面量
  */
-public class ObjectLiteral implements Expr {
+public class ObjectLiteral extends Expr {
     private final Map<String, Expr> fields;
 
     public ObjectLiteral(Map<String, Expr> fields) {
@@ -19,7 +19,7 @@ public class ObjectLiteral implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

@@ -12,7 +12,7 @@ import byx.script.core.parser.ast.ASTVisitor;
  *     stmts
  * }
  */
-public class Try implements Statement {
+public class Try extends Statement {
     private final Statement tryBranch;
     private final String catchVar;
     private final Statement catchBranch;
@@ -42,7 +42,7 @@ public class Try implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

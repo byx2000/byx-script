@@ -8,7 +8,7 @@ import byx.script.core.parser.ast.expr.Expr;
  * for (init; cond; update)
  *     body
  */
-public class For implements Statement {
+public class For extends Statement {
     private final Statement init;
     private final Expr cond;
     private final Statement update;
@@ -38,7 +38,7 @@ public class For implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

@@ -1,6 +1,6 @@
 package byx.script.core.interpreter.value;
 
-import byx.script.core.interpreter.InterpretException;
+import byx.script.core.interpreter.exception.InterpretException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

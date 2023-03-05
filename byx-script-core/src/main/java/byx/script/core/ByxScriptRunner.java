@@ -1,7 +1,7 @@
 package byx.script.core;
 
 import byx.script.core.interpreter.Evaluator;
-import byx.script.core.interpreter.InterpretException;
+import byx.script.core.interpreter.exception.InterpretException;
 import byx.script.core.interpreter.Scope;
 import byx.script.core.interpreter.builtin.*;
 import byx.script.core.interpreter.builtin.Math;

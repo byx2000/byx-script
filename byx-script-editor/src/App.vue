@@ -61,7 +61,7 @@ export default {
         }
       },
       script: '',
-      output: '',
+      output: '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
       runBtnDisabled: false,
       runBtnIcon: 'el-icon-s-promotion',
       runBtnText: '点击运行'
@@ -123,7 +123,7 @@ html, body {
 }
 
 #editor {
-  flex: 7;
+  flex: 5;
   height: 100%;
   border: 1px solid #dcdfe6;
   margin-right: 10px;
@@ -139,7 +139,7 @@ html, body {
 
 <style>
 .el-textarea {
-  flex: 3;
+  flex: 5;
   height: 100%;
   margin-left: 10px;
 

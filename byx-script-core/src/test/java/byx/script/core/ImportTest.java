@@ -1,6 +1,6 @@
 package byx.script.core;
 
-import byx.script.core.interpreter.InterpretException;
+import byx.script.core.interpreter.exception.InterpretException;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;

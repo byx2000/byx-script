@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 语句块
  */
-public class Block implements Statement {
+public class Block extends Statement {
     private final List<Statement> stmts;
 
     public Block(List<Statement> stmts) {
@@ -19,7 +19,7 @@ public class Block implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

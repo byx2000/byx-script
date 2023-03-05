@@ -1,5 +1,6 @@
 package byx.script.core.interpreter;
 
+import byx.script.core.interpreter.exception.InterpretException;
 import byx.script.core.util.Pair;
 import byx.script.core.interpreter.value.BoolValue;
 import byx.script.core.interpreter.value.Value;

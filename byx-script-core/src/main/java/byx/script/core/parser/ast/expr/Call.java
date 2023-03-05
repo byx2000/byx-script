@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 函数调用
  */
-public class Call implements Expr {
+public class Call extends Expr {
     private final Expr expr;
     private final List<Expr> args;
 
@@ -25,7 +25,7 @@ public class Call implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

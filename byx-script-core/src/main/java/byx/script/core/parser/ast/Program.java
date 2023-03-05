@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 封装解析后的程序
  */
-public class Program implements ASTNode {
+public class Program extends ASTNode {
     private final List<String> imports;
     private final List<Statement> stmts;
 
@@ -25,7 +25,7 @@ public class Program implements ASTNode {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

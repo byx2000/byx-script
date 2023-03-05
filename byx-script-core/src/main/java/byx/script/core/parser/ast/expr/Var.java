@@ -5,7 +5,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 /**
  * 变量引用
  */
-public class Var implements Expr {
+public class Var extends Expr {
     private final String varName;
 
     public Var(String varName) {
@@ -17,7 +17,7 @@ public class Var implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

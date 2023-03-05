@@ -1,8 +1,10 @@
 package byx.script.core;
 
+import byx.script.core.interpreter.exception.InterruptException;
 import org.junit.jupiter.api.Test;
 
 import static byx.script.core.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ByxScriptTest {
     @Test
@@ -1570,5 +1572,27 @@ public class ByxScriptTest {
                 catch1 hello
                 catch2 hi
                 """);
+    }
+
+    @Test
+    public void testInterrupt1() throws InterruptedException {
+        Thread t = new Thread(() -> {
+            ByxScriptRunner runner = new ByxScriptRunner();
+            assertThrows(InterruptException.class, () -> runner.run("while (true) {}"));
+        });
+        t.start();
+        t.join(1000);
+        t.interrupt();
+    }
+
+    @Test
+    public void testInterrupt2() throws InterruptedException {
+        Thread t = new Thread(() -> {
+            ByxScriptRunner runner = new ByxScriptRunner();
+            assertThrows(InterruptException.class, () -> runner.run("for (var i = 1; i >= 0; i++) {}"));
+        });
+        t.start();
+        t.join(1000);
+        t.interrupt();
     }
 }

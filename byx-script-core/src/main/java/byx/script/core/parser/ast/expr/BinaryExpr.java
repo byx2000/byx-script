@@ -5,7 +5,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 /**
  * 二元表达式
  */
-public class BinaryExpr implements Expr {
+public class BinaryExpr extends Expr {
     private final BinaryOp op;
     private final Expr lhs, rhs;
 
@@ -28,7 +28,7 @@ public class BinaryExpr implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

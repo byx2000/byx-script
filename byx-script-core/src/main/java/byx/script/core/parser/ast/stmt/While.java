@@ -8,7 +8,7 @@ import byx.script.core.parser.ast.expr.Expr;
  * while (cond)
  *     body
  */
-public class While implements Statement {
+public class While extends Statement {
     private final Expr cond;
     private final Statement body;
 
@@ -26,7 +26,7 @@ public class While implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

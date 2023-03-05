@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 列表字面量
  */
-public class ListLiteral implements Expr {
+public class ListLiteral extends Expr {
     private final List<Expr> elems;
 
     public ListLiteral(List<Expr> elems) {
@@ -19,7 +19,7 @@ public class ListLiteral implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

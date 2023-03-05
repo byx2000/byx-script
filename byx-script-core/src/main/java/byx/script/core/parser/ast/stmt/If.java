@@ -13,7 +13,7 @@ import java.util.List;
  * ...
  * else stmt
  */
-public class If implements Statement {
+public class If extends Statement {
     private final List<Pair<Expr, Statement>> cases;
     private final Statement elseBranch;
 
@@ -31,7 +31,7 @@ public class If implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

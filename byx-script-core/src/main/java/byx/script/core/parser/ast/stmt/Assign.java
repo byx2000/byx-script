@@ -6,7 +6,7 @@ import byx.script.core.parser.ast.expr.Expr;
 /**
  * 赋值语句
  */
-public class Assign implements Statement {
+public class Assign extends Statement {
     private final Expr lhs, rhs;
 
     public Assign(Expr lhs, Expr rhs) {
@@ -23,7 +23,7 @@ public class Assign implements Statement {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }

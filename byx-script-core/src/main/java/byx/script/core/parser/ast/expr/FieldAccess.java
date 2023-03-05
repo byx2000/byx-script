@@ -5,7 +5,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 /**
  * 字段访问
  */
-public class FieldAccess implements Expr {
+public class FieldAccess extends Expr {
     private final Expr expr;
     private final String field;
 
@@ -23,7 +23,7 @@ public class FieldAccess implements Expr {
     }
 
     @Override
-    public <R, C> R visit(ASTVisitor<R, C> visitor, C ctx) {
+    public <R, C> R doVisit(ASTVisitor<R, C> visitor, C ctx) {
         return visitor.visit(this, ctx);
     }
 }
