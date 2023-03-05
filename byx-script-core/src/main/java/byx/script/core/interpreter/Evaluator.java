@@ -8,7 +8,7 @@ import byx.script.core.parser.ast.ASTVisitor;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
 import byx.script.core.parser.ast.stmt.*;
-import byx.script.core.parser.parserc.exception.FastException;
+import byx.script.core.parser.exception.FastException;
 
 import java.util.List;
 import java.util.Map;

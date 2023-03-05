@@ -1,4 +1,4 @@
-package byx.script.core.parser.parserc.exception;
+package byx.script.core.parser.exception;
 
 import byx.script.core.parser.parserc.Cursor;
 

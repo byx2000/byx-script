@@ -1,8 +1,8 @@
 package byx.script.core.parser.parserc;
 
 import byx.script.core.util.Pair;
-import byx.script.core.parser.parserc.exception.FatalParseException;
-import byx.script.core.parser.parserc.exception.ParseException;
+import byx.script.core.parser.exception.FatalParseException;
+import byx.script.core.parser.exception.ParseException;
 
 import java.util.*;
 import java.util.function.BiFunction;

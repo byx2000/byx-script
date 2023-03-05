@@ -1,6 +1,6 @@
 package byx.script.core.parser.parserc;
 
-import byx.script.core.parser.parserc.exception.EndOfInputException;
+import byx.script.core.parser.exception.ParseException;
 
 /**
  * 封装当前解析位置
@@ -25,9 +25,9 @@ public class Cursor {
         this.col = col;
     }
 
-    public Cursor next() throws EndOfInputException {
+    public Cursor next() throws ParseException {
         if (end()) {
-            throw new EndOfInputException(this);
+            throw new ParseException(this, "unexpected end of input");
         }
 
         int row = this.row;
@@ -51,9 +51,9 @@ public class Cursor {
      * 获取当前字符
      * @return 当前字符
      */
-    public char current() throws EndOfInputException {
+    public char current() throws ParseException {
         if (end()) {
-            throw new EndOfInputException(this);
+            throw new ParseException(this, "unexpected end of input");
         }
         return s.charAt(index);
     }
