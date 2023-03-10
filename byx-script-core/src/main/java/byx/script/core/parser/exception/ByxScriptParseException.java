@@ -3,19 +3,19 @@ package byx.script.core.parser.exception;
 import byx.script.core.parser.parserc.Cursor;
 
 /**
- * 严重的解析错误，不会被or和oneOf等组合子捕获
+ * ByxScript解析异常
  */
-public class FatalParseException extends FastException {
+public class ByxScriptParseException extends FastException {
     private final Cursor cursor;
     private final String msg;
 
-    public FatalParseException(Cursor cursor, String msg) {
+    public ByxScriptParseException(Cursor cursor, String msg) {
         this.cursor = cursor;
         this.msg = msg;
     }
 
     @Override
     public String getMessage() {
-        return String.format("at row %d, col %d: %s", cursor.row(), cursor.col(), msg);
+        return String.format("语法解析错误：\n第%d行，第%d列：%s", cursor.row(), cursor.col(), msg);
     }
 }

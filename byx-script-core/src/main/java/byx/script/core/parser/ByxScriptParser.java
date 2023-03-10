@@ -1,12 +1,14 @@
 package byx.script.core.parser;
 
-import byx.script.core.util.Pair;
 import byx.script.core.interpreter.exception.InterpretException;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
 import byx.script.core.parser.ast.stmt.*;
+import byx.script.core.parser.exception.ByxScriptParseException;
+import byx.script.core.parser.exception.ParseException;
 import byx.script.core.parser.parserc.Parser;
+import byx.script.core.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +21,7 @@ import static byx.script.core.parser.parserc.Parsers.*;
  */
 public class ByxScriptParser {
     // 空白字符
-    private static final Parser<?> ws = chs(' ', '\t', '\r', '\n').map(Objects::toString);
+    private static final Parser<?> ws = chs(' ', '\t', '\r', '\n');
 
     // 行注释
     private static final Parser<?> lineComment = str("//").and(until(ch('\n')));
@@ -59,31 +61,38 @@ public class ByxScriptParser {
     private static final Parser<String> bool = strs("true", "false").surround(ignorable);
 
     // 符号
-    private static final Parser<String> assign = str("=").surround(ignorable);
+    private static final Parser<String> assign = str("=").notFollow(strs("=", ">")).surround(ignorable);
+    private static final Parser<String> assign_fatal = withFatal(assign, "expect '='");
     private static final Parser<String> semi = str(";").surround(ignorable);
+    private static final Parser<String> semi_fatal = withFatal(semi, "expect semi");
     private static final Parser<String> comma = str(",").surround(ignorable);
     private static final Parser<String> colon = str(":").surround(ignorable);
     private static final Parser<String> dot = str(".").surround(ignorable);
     private static final Parser<String> lp = str("(").surround(ignorable);
+    private static final Parser<String> lp_fatal = withFatal(lp, "expect '('");
     private static final Parser<String> rp = str(")").surround(ignorable);
+    private static final Parser<String> rp_fatal = withFatal(rp, "expect ')'");
     private static final Parser<String> lb = str("{").surround(ignorable);
+    private static final Parser<String> lb_fatal = withFatal(lb, "expect '{'");
     private static final Parser<String> rb = str("}").surround(ignorable);
+    private static final Parser<String> rb_fatal = withFatal(rb, "eexpect '}'");
     private static final Parser<String> ls = str("[").surround(ignorable);
     private static final Parser<String> rs = str("]").surround(ignorable);
-    private static final Parser<String> add = str("+").surround(ignorable);
-    private static final Parser<String> sub = str("-").surround(ignorable);
-    private static final Parser<String> mul = str("*").surround(ignorable);
-    private static final Parser<String> div = str("/").surround(ignorable);
+    private static final Parser<String> rs_fatal = withFatal(rs, "expect ']'");
+    private static final Parser<String> add = str("+").notFollow(strs("+", "=")).surround(ignorable);
+    private static final Parser<String> sub = str("-").notFollow(strs("-", "=")).surround(ignorable);
+    private static final Parser<String> mul = str("*").notFollow(str("=")).surround(ignorable);
+    private static final Parser<String> div = str("/").notFollow(str("=")).surround(ignorable);
     private static final Parser<String> rem = str("%").surround(ignorable);
-    private static final Parser<String> gt = str(">").surround(ignorable);
+    private static final Parser<String> gt = str(">").notFollow(str("=")).surround(ignorable);
     private static final Parser<String> get = str(">=").surround(ignorable);
-    private static final Parser<String> lt = str("<").surround(ignorable);
+    private static final Parser<String> lt = str("<").notFollow(str("=")).surround(ignorable);
     private static final Parser<String> let = str("<=").surround(ignorable);
     private static final Parser<String> equ = str("==").surround(ignorable);
     private static final Parser<String> neq = str("!=").surround(ignorable);
     private static final Parser<String> and = str("&&").surround(ignorable);
     private static final Parser<String> or = str("||").surround(ignorable);
-    private static final Parser<String> not = str("!").surround(ignorable);
+    private static final Parser<String> not = str("!").notFollow(str("=")).surround(ignorable);
     private static final Parser<String> arrow = str("=>").surround(ignorable);
     private static final Parser<String> inc = str("++").surround(ignorable);
     private static final Parser<String> dec = str("--").surround(ignorable);
@@ -107,6 +116,7 @@ public class ByxScriptParser {
     private static final Parser<String> undefined_ = str("undefined").surround(ignorable);
     private static final Parser<String> try_ = str("try").surround(ignorable);
     private static final Parser<String> catch_ = str("catch").surround(ignorable);
+    private static final Parser<String> catch_fatal = withFatal(catch_, "expect 'catch'");
     private static final Parser<String> finally_ = str("finally").surround(ignorable);
     private static final Parser<String> throw_ = str("throw").surround(ignorable);
 
@@ -118,6 +128,7 @@ public class ByxScriptParser {
             .map(p -> p.getFirst() + join(p.getSecond()))
             .then(r -> kw.contains(r.getResult()) ? fail("cannot use keyword as identifier") : success(r.getResult()))
             .surround(ignorable);
+    private static final Parser<String> identifier_fatal = withFatal(identifier, "expect identifier");
 
     // 前向引用
     private static final Parser<Statement> lazyStmt = lazy(() -> ByxScriptParser.stmt);
@@ -142,14 +153,17 @@ public class ByxScriptParser {
     // undefined字面量
     private static final Parser<Expr> undefinedLiteral = undefined_.map(r -> new Literal(Value.undefined()));
 
-    private static final Parser<List<String>> idList = list(comma, identifier).opt(Collections.emptyList());
+    private static final Parser<List<String>> idList = oneOf(
+            identifier.and(skip(comma).and(identifier_fatal).many()).map(ByxScriptParser::mapToList),
+            empty().value(Collections.emptyList())
+    );
 
     // 函数字面量
     private static final Parser<List<String>> singleParamList = identifier.map(List::of);
     private static final Parser<List<String>> multiParamList = skip(lp).and(idList).skip(rp);
-    private static final Parser<List<String>> paramList = singleParamList.or(multiParamList);
-    private static final Parser<Expr> callableLiteral = paramList.skip(arrow).and(oneOf(
-            skip(lb).and(stmts).skip(rb.fatal()).map(Block::new),
+    private static final Parser<List<String>> lambdaParamList = singleParamList.or(multiParamList);
+    private static final Parser<Expr> callableLiteral = lambdaParamList.skip(arrow).and(oneOf(
+            skip(lb).and(stmts).skip(rb_fatal).map(Block::new),
             lazyExpr.map(Return::new)
     )).map(p -> new CallableLiteral(p.getFirst(), p.getSecond()));
 
@@ -161,7 +175,7 @@ public class ByxScriptParser {
             identifier.map(id -> new Pair<>(id, new Var(id)))
     );
     private static final Parser<List<Pair<String, Expr>>> fieldList = list(comma, fieldPair).opt(Collections.emptyList());
-    private static final Parser<Expr> objLiteral = skip(lb).and(fieldList).skip(rb.fatal())
+    private static final Parser<Expr> objLiteral = skip(lb).and(fieldList).skip(rb_fatal)
             .map(ps -> new ObjectLiteral(ps.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))));
 
     private static final Parser<List<Expr>> exprList = list(comma, lazyExpr).opt(Collections.emptyList());
@@ -169,22 +183,22 @@ public class ByxScriptParser {
     // 列表字面量
     private static final Parser<Expr> listLiteral = skip(ls)
             .and(exprList)
-            .skip(rs.fatal())
+            .skip(rs_fatal)
             .map(ListLiteral::new);
 
     // 变量
     private static final Parser<Expr> var = identifier.map(Var::new);
 
     // 下标
-    private static final Parser<Expr> subscript = skip(ls).and(lazyExpr).skip(rs.fatal());
+    private static final Parser<Expr> subscript = skip(ls).and(lazyExpr).skip(rs_fatal);
 
     // 字段访问
-    private static final Parser<String> fieldAccess = skip(dot).and(identifier.fatal());
+    private static final Parser<String> fieldAccess = skip(dot).and(identifier_fatal);
 
     // 调用列表
     private static final Parser<List<Expr>> callList = skip(lp)
             .and(exprList)
-            .skip(rp.fatal());
+            .skip(rp_fatal);
 
     // 表达式
 
@@ -206,34 +220,39 @@ public class ByxScriptParser {
             negExpr,
             notExpr
     ).and(alt(callList, fieldAccess, subscript).many()).map(ByxScriptParser::buildPrimaryExpr);
-    private static final Parser<Expr> multiplicativeExpr = primaryExpr.and(oneOf(mul, div, rem).and(primaryExpr).many())
+    private static final Parser<Expr> multiplicativeExpr = primaryExpr.and(oneOf(mul, div, rem).and(withFatal(primaryExpr, "invalid expression")).many())
             .map(ByxScriptParser::buildBinaryExpr);
-    private static final Parser<Expr> additiveExpr = multiplicativeExpr.and(oneOf(add, sub).and(multiplicativeExpr).many())
+    private static final Parser<Expr> additiveExpr = multiplicativeExpr.and(oneOf(add, sub).and(withFatal(multiplicativeExpr, "invalid expression")).many())
             .map(ByxScriptParser::buildBinaryExpr);
-    private static final Parser<Expr> relationalExpr = additiveExpr.and(oneOf(let, lt, get, gt, equ, neq).and(additiveExpr).many())
+    private static final Parser<Expr> relationalExpr = additiveExpr.and(oneOf(let, lt, get, gt, equ, neq).and(withFatal(additiveExpr, "invalid expression")).many())
             .map(ByxScriptParser::buildBinaryExpr);
-    private static final Parser<Expr> andExpr = relationalExpr.and(and.and(relationalExpr).many())
+    private static final Parser<Expr> andExpr = relationalExpr.and(and.and(withFatal(relationalExpr, "invalid expression")).many())
             .map(ByxScriptParser::buildBinaryExpr);
-    private static final Parser<Expr> expr = andExpr.and(or.and(andExpr).many())
+    private static final Parser<Expr> expr = andExpr.and(or.and(withFatal(andExpr, "invalid expression")).many())
             .map(ByxScriptParser::buildBinaryExpr);
+    private static final Parser<Expr> expr_fatal = withFatal(expr, "invalid expression");
 
     // 语句
 
     // 变量声明
     private static final Parser<Statement> varDeclare = skip(var_)
-            .and(identifier.fatal())
-            .skip(assign.fatal())
-            .and(expr)
+            .and(identifier_fatal)
+            .skip(assign_fatal)
+            .and(expr_fatal)
             .map(p -> new VarDeclare(p.getFirst(), p.getSecond()));
 
     // 函数声明
+    private static final Parser<List<String>> paramList = oneOf(
+            expect(rp).value(Collections.emptyList()),
+            identifier_fatal.and(skip(comma).and(identifier_fatal).many()).map(ByxScriptParser::mapToList)
+    );
     private static final Parser<Statement> funcDeclare = skip(function_)
-            .and(identifier.fatal("expected identifier"))
-            .skip(lp.fatal())
-            .and(idList)
-            .skip(rp.fatal().and(lb.fatal()))
+            .and(identifier_fatal)
+            .skip(lp_fatal)
+            .and(paramList)
+            .skip(rp_fatal.and(lb_fatal))
             .and(stmts)
-            .skip(rb.fatal())
+            .skip(rb_fatal)
             .map(p -> {
                 String functionName = p.getFirst().getFirst();
                 List<String> params = p.getFirst().getSecond();
@@ -261,77 +280,71 @@ public class ByxScriptParser {
             .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Sub, e, new Literal(Value.of(1)))));
 
     // 代码块
-    private static final Parser<Statement> block = skip(lb).and(stmts).skip(rb.fatal()).map(Block::new);
+    private static final Parser<Statement> block = skip(lb).and(stmts).skip(rb_fatal).map(Block::new);
+    private static final Parser<Statement> block_fatal = skip(lb_fatal).and(stmts).skip(rb_fatal).map(Block::new);
 
     // if语句
-    private static final Parser<Statement> ifStmt = skip(if_.and(lp.fatal()))
-            .and(expr)
-            .skip(rp.fatal().and(lb.fatal()))
-            .and(stmts)
-            .skip(rb.fatal())
-            .and(skip(else_.and(if_).and(lp.fatal())).and(expr).skip(rp.fatal().and(lb.fatal())).and(stmts).skip(rb.fatal()).many())
-            .and(skip(else_.and(lb.fatal())).and(stmts).skip(rb.fatal()).opt(Collections.emptyList()))
-            .map(p -> {
-                List<Pair<Expr, Statement>> cases = new ArrayList<>();
-                cases.add(new Pair<>(p.getFirst().getFirst().getFirst(), new Block(p.getFirst().getFirst().getSecond())));
-                for (Pair<Expr, List<Statement>> pp : p.getFirst().getSecond()) {
-                    cases.add(new Pair<>(pp.getFirst(), new Block(pp.getSecond())));
-                }
-                Statement elseBranch = new Block(p.getSecond());
-                return new If(cases, elseBranch);
-            });
+    private static final Parser<Pair<Expr, Statement>> ifPart =
+            skip(if_.and(lp_fatal))
+            .and(expr_fatal)
+            .skip(rp_fatal)
+            .and(block_fatal);
+    private static final Parser<List<Pair<Expr, Statement>>> elseifPart =
+            skip(else_.and(if_).and(lp_fatal))
+            .and(expr_fatal)
+            .skip(rp_fatal)
+            .and(block_fatal)
+            .many();
+    private static final Parser<Statement> elsePart =
+            skip(else_)
+            .and(block_fatal)
+            .opt(new Block(Collections.emptyList()));
+    private static final Parser<Statement> ifStmt = ifPart.and(elseifPart).and(elsePart)
+            .map(ByxScriptParser::buildIfNode);
 
     // for语句
-    private static final Parser<Statement> forStmt = skip(for_.and(lp))
+    private static final Parser<Statement> forStmt =
+            skip(for_.and(lp))
             .and(lazyStmt)
-            .skip(semi.fatal())
+            .skip(semi_fatal)
             .and(expr)
-            .skip(semi.fatal())
+            .skip(semi_fatal)
             .and(lazyStmt)
-            .skip(rp.fatal().and(lb.fatal()))
-            .and(stmts)
-            .skip(rb.fatal())
-            .map(p -> {
-                Statement init = p.getFirst().getFirst().getFirst();
-                Expr cond = p.getFirst().getFirst().getSecond();
-                Statement update = p.getFirst().getSecond();
-                Statement body = new Block(p.getSecond());
-                return new For(init, cond, update, body);
-            });
+            .skip(rp_fatal)
+            .and(block_fatal)
+            .map(ByxScriptParser::buildForNode);
 
     // while语句
-    private static final Parser<Statement> whileStmt = skip(while_.and(lp.fatal()))
+    private static final Parser<Statement> whileStmt =
+            skip(while_.and(lp_fatal))
             .and(expr)
-            .skip(rp.fatal().and(lb.fatal()))
-            .and(stmts)
-            .skip(rb.fatal())
-            .map(p -> new While(p.getFirst(), new Block(p.getSecond())));
+            .skip(rp_fatal)
+            .and(block_fatal)
+            .map(p -> new While(p.getFirst(), p.getSecond()));
 
     // break语句
-    private static final Parser<Statement> breakStmt = break_.value(new Break());
+    private static final Parser<Statement> breakStmt = break_.value(Break.INSTANCE);
 
     // continue语句
-    private static final Parser<Statement> continueStmt = continue_.value(new Continue());
+    private static final Parser<Statement> continueStmt = continue_.value(Continue.INSTANCE);
 
     // return语句
-    private static final Parser<Statement> returnStmt = skip(return_).and(expr.opt(new Literal(Value.undefined()))).map(Return::new);
+    private static final Parser<Statement> returnStmt = skip(return_).and(expr.opt(new Literal(Value.undefined())))
+            .map(Return::new);
 
     // try-catch-finally语句
-    private static final Parser<Statement> tryStmt = skip(try_.and(lb.fatal()))
-            .and(stmts)
-            .skip(rb.fatal().and(catch_.fatal()).and(lp.fatal()))
+    private static final Parser<Statement> tryPart = skip(try_).and(block_fatal);
+    private static final Parser<Pair<String, Statement>> catchPart =
+            skip(catch_fatal.and(lp_fatal))
             .and(identifier)
-            .skip(rp.fatal().and(lb.fatal()))
-            .and(stmts)
-            .skip(rb.fatal())
-            .and(skip(finally_.and(lb.fatal())).and(stmts).skip(rb.fatal()).opt(Collections.emptyList()))
-            .map(p -> {
-                Statement tryBranch = new Block(p.getFirst().getFirst().getFirst());
-                String catchVar = p.getFirst().getFirst().getSecond();
-                Statement catchBranch = new Block(p.getFirst().getSecond());
-                Statement finallyBranch = new Block(p.getSecond());
-                return new Try(tryBranch, catchVar, catchBranch, finallyBranch);
-            });
+            .skip(rp_fatal)
+            .and(block_fatal);
+    private static final Parser<Statement> finallyPart = skip(finally_).and(block_fatal);
+    private static final Parser<Statement> tryStmt =
+            tryPart
+            .and(catchPart)
+            .and(finallyPart.opt(new Block(Collections.emptyList())))
+            .map(ByxScriptParser::buildTryNode);
 
     // throw语句
     private static final Parser<Statement> throwStmt = skip(throw_).and(expr).map(Throw::new);
@@ -442,12 +455,53 @@ public class ByxScriptParser {
         throw new RuntimeException("invalid assign expression: " + op);
     }
 
+    private static <T> Parser<T> withFatal(Parser<T> p, String msg) {
+        return p.fatal(c -> new ByxScriptParseException(c, msg));
+    }
+
+    private static <T> List<T> mapToList(Pair<T, List<T>> p) {
+        List<T> list = new ArrayList<>();
+        list.add(p.getFirst());
+        list.addAll(p.getSecond());
+        return list;
+    }
+
+    private static If buildIfNode(Pair<Pair<Pair<Expr, Statement>, List<Pair<Expr, Statement>>>, Statement> p) {
+        List<Pair<Expr, Statement>> cases = new ArrayList<>();
+        cases.add(new Pair<>(p.getFirst().getFirst().getFirst(), p.getFirst().getFirst().getSecond()));
+        for (Pair<Expr, Statement> pp : p.getFirst().getSecond()) {
+            cases.add(new Pair<>(pp.getFirst(), pp.getSecond()));
+        }
+        Statement elseBranch = p.getSecond();
+        return new If(cases, elseBranch);
+    }
+
+    private static For buildForNode(Pair<Pair<Pair<Statement, Expr>, Statement>, Statement> p) {
+        Statement init = p.getFirst().getFirst().getFirst();
+        Expr cond = p.getFirst().getFirst().getSecond();
+        Statement update = p.getFirst().getSecond();
+        Statement body = p.getSecond();
+        return new For(init, cond, update, body);
+    }
+
+    private static Try buildTryNode(Pair<Pair<Statement, Pair<String, Statement>>, Statement> p) {
+        Statement tryBranch = p.getFirst().getFirst();
+        String catchVar = p.getFirst().getSecond().getFirst();
+        Statement catchBranch = p.getFirst().getSecond().getSecond();
+        Statement finallyBranch = p.getSecond();
+        return new Try(tryBranch, catchVar, catchBranch, finallyBranch);
+    }
+
     /**
      * 解析脚本
      * @param script 脚本字符串
      * @return 抽象语法树
      */
-    public static Program parse(String script) {
-        return program.parse(script);
+    public static Program parse(String script) throws ByxScriptParseException {
+        try {
+            return program.parse(script);
+        } catch (ParseException e) {
+            throw new ByxScriptParseException(e.getCursor(), e.getMsg());
+        }
     }
 }

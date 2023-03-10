@@ -5,17 +5,13 @@ import byx.script.core.parser.exception.ParseException;
 /**
  * 封装当前解析位置
  */
-public class Cursor {
+public final class Cursor {
     private final String s;
     private final int index;
     private final int row, col;
 
     public Cursor(String s) {
-        this(s, 0);
-    }
-
-    public Cursor(String s, int index) {
-        this(s, index, 1, 1);
+        this(s, 0, 1, 1);
     }
 
     private Cursor(String s, int index, int row, int col) {
@@ -62,7 +58,7 @@ public class Cursor {
      * 获取当前索引
      * @return 当前索引
      */
-    public int getIndex() {
+    public int index() {
         return index;
     }
 
@@ -80,10 +76,5 @@ public class Cursor {
      */
     public int col() {
         return col;
-    }
-
-    @Override
-    public String toString() {
-        return s.substring(index);
     }
 }
