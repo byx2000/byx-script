@@ -267,35 +267,6 @@ public class Parsers {
         return cursor -> parserSupplier.get().parse(cursor);
     }
 
-    /**
-     * <p>解析列表型数据</p>
-     * <p>prefix elem delimiter elem delimiter ... suffix</p>
-     * @param prefix 前缀
-     * @param suffix 后缀
-     * @param delimiter 元素分隔符
-     * @param elem 元素
-     */
-    public static <R> Parser<List<R>> list(Parser<?> prefix, Parser<?> suffix, Parser<?> delimiter, Parser<R> elem) {
-        Parser<List<R>> emptyList = prefix.and(suffix).map(r -> Collections.emptyList());
-        Parser<List<R>> notEmptyList = skip(prefix).and(elem).and(skip(delimiter).and(elem).many()).skip(suffix).map(p -> {
-            List<R> result = new ArrayList<>();
-            result.add(p.getFirst());
-            result.addAll(p.getSecond());
-            return result;
-        });
-        return oneOf(notEmptyList, emptyList);
-    }
-
-    /**
-     * <p>解析列表型数据</p>
-     * <p>elem delimiter elem delimiter ...</p>
-     * @param delimiter 元素分隔符
-     * @param elem 元素
-     */
-    public static <R> Parser<List<R>> list(Parser<?> delimiter, Parser<R> elem) {
-        return list(empty(), empty(), delimiter, elem);
-    }
-
     public static class SkipWrapper<R> {
         private final Parser<R> lhs;
 
@@ -314,31 +285,6 @@ public class Parsers {
      */
     public static <R> SkipWrapper<R> skip(Parser<R> lhs) {
         return new SkipWrapper<>(lhs);
-    }
-
-    /**
-     * 根据predicate解析器的执行成功与否，选择执行success或failed解析器
-     * @param predicate predicate
-     * @param success success
-     * @param failed failed
-     */
-    public static <R> Parser<R> peek(Parser<?> predicate, Parser<R> success, Parser<R> failed) {
-        return cursor -> {
-            try {
-                predicate.parse(cursor);
-            } catch (ParseException e) {
-                return failed.parse(cursor);
-            }
-            return success.parse(cursor);
-        };
-    }
-
-    /**
-     * 一直向前解析，直到解析器p执行成功，并返回p的解析结果
-     * @param p p
-     */
-    public static <R> Parser<R> until(Parser<R> p) {
-        return skip(peek(p, fail(), any()).many()).and(p);
     }
 
     /**
@@ -366,4 +312,12 @@ public class Parsers {
             throw new ParseException(cursor);
         };
     }
+
+    /*public static <R> Parser<R> not(char c) {
+        return not(ch(c));
+    }
+
+    public static <R> Parser<R> not(String s) {
+        return not(str(s));
+    }*/
 }

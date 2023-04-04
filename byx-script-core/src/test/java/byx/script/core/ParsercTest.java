@@ -441,36 +441,6 @@ public class ParsercTest {
     }
 
     @Test
-    public void testList1() {
-        Parser<Integer> num = range('0', '9').many1()
-                .map(chs -> chs.stream().map(Object::toString).collect(Collectors.joining()))
-                .map(Integer::parseInt);
-        Parser<List<Integer>> p = list(ch('['), ch(']'), ch(','), num);
-        verifyParseResult(p.parse(new Cursor("[123,4,56]")), List.of(123, 4, 56), 0, 10);
-        verifyParseResult(p.parse(new Cursor("[123]")), List.of(123), 0, 5);
-        verifyParseResult(p.parse(new Cursor("[]")), Collections.emptyList(), 0, 2);
-        assertThrows(ParseException.class, () -> p.parse("[123,4,56"));
-        assertThrows(ParseException.class, () -> p.parse("123,4,56]"));
-        assertThrows(ParseException.class, () -> p.parse("[[123,4,56]"));
-        assertThrows(ParseException.class, () -> p.parse("[123;4,56]"));
-        assertThrows(ParseException.class, () -> p.parse("[123,,56]"));
-        assertThrows(ParseException.class, () -> p.parse(""));
-    }
-
-    @Test
-    public void testList2() {
-        Parser<Integer> num = range('0', '9').many1()
-                .map(chs -> chs.stream().map(Object::toString).collect(Collectors.joining()))
-                .map(Integer::parseInt);
-        Parser<List<Integer>> p = list(ch(','), num);
-        verifyParseResult(p.parse(new Cursor("123,4,56")), List.of(123, 4, 56), 0, 8);
-        verifyParseResult(p.parse(new Cursor("123")), List.of(123), 0, 3);
-        verifyParseResult(p.parse(new Cursor("")), Collections.emptyList(), 0, 0);
-        assertThrows(ParseException.class, () -> p.end().parse("123;4,56"));
-        assertThrows(ParseException.class, () -> p.end().parse("123,,56"));
-    }
-
-    @Test
     public void testSurround1() {
         Parser<Character> p = ch('a').surround(ch('('), ch(')'));
         verifyParseResult(p.parse(new Cursor("(a)")), 'a', 0, 3);
@@ -511,26 +481,6 @@ public class ParsercTest {
     }
 
     @Test
-    public void testPeek() {
-        Parser<String> p = peek(ch('a'), str("abc"), str("defg"));
-        verifyParseResult(p.parse(new Cursor("abc")), "abc", 0, 3);
-        verifyParseResult(p.parse(new Cursor("defg")), "defg", 0, 4);
-        assertThrows(ParseException.class, () -> p.parse("ab"));
-        assertThrows(ParseException.class, () -> p.parse("def"));
-        assertThrows(ParseException.class, () -> p.parse("xyz"));
-        assertThrows(ParseException.class, () -> p.parse(""));
-    }
-
-    @Test
-    public void testUntil() {
-        Parser<String> p = until(str("end"));
-        verifyParseResult(p.parse(new Cursor("abcdeend")), "end", 0, 8);
-        verifyParseResult(p.parse(new Cursor("end")), "end", 0, 3);
-        assertThrows(ParseException.class, () -> p.parse("xyz"));
-        assertThrows(ParseException.class, () -> p.parse(""));
-    }
-
-    @Test
     public void testThen() {
         Set<String> keywords = Set.of("if", "else", "while", "for");
         Parser<Character> alpha = range('a', 'z').or(range('A', 'Z'));
@@ -554,5 +504,35 @@ public class ParsercTest {
             return new MyException(c, "");
         });
         assertThrows(MyException.class, () -> p.parse("bcd"));
+    }
+
+    @Test
+    public void testExpect() {
+        Parser<?> p = expect(str("xy"));
+        verifyParseResult(p.parse(new Cursor("xyz")), null, 0, 0);
+        assertThrows(ParseException.class, () -> p.parse("xz"));
+    }
+
+    @Test
+    public void testNot() {
+        Parser<?> p = not(str("xy"));
+        verifyParseResult(p.parse(new Cursor("abc")), null, 0, 0);
+        assertThrows(ParseException.class, () -> p.parse("xyz"));
+    }
+
+    @Test
+    public void testFollow() {
+        Parser<String> p = str("abc").follow(ch('d'));
+        verifyParseResult(p.parse(new Cursor("abcd")), "abc", 0, 3);
+        assertThrows(ParseException.class, () -> p.parse("abcx"));
+        assertThrows(ParseException.class, () -> p.parse("abc"));
+    }
+
+    @Test
+    public void testNotFollow() {
+        Parser<String> p = str("abc").notFollow(ch('d'));
+        verifyParseResult(p.parse(new Cursor("abcx")), "abc", 0, 3);
+        verifyParseResult(p.parse(new Cursor("abc")), "abc", 0, 3);
+        assertThrows(ParseException.class, () -> p.parse("abcd"));
     }
 }

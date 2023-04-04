@@ -43,6 +43,22 @@ public interface Parser<R> {
     }
 
     /**
+     * 在当前解析器后连接字符c
+     * @param c c
+     */
+    default Parser<Pair<R, Character>> and(char c) {
+        return this.and(Parsers.ch(c));
+    }
+
+    /**
+     * 在当前解析器后连接字符串s
+     * @param s s
+     */
+    default Parser<Pair<R, String>> and(String s) {
+        return this.and(Parsers.str(s));
+    }
+
+    /**
      * <p>依次尝试应用两个解析器，如果成功则返回其解析结果</p>
      * <p>如果两个解析器都失败，则解析失败</p>
      * @param rhs 解析器2
@@ -239,10 +255,18 @@ public interface Parser<R> {
         return this.skip(Parsers.end());
     }
 
+    /**
+     * 当前解析器应用后执行断言predicate，断言失败抛出异常
+     * @param predicate predicate
+     */
     default Parser<R> follow(Parser<?> predicate) {
-        return this.skip(Parsers.not(predicate));
+        return this.skip(Parsers.expect(predicate));
     }
 
+    /**
+     * 当前解析器应用后执行断言predicate，断言成功抛出异常
+     * @param predicate predicate
+     */
     default Parser<R> notFollow(Parser<?> predicate) {
         return this.skip(Parsers.not(predicate));
     }
