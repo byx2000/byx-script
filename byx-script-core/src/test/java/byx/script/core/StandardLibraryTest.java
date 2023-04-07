@@ -506,36 +506,36 @@ public class StandardLibraryTest {
                 Console.println(Math.floor(7))
                 Console.println(Math.floor(8.3))
                 Console.println(Math.floor(12.9))
-                """, getOutput(() -> {
-                System.out.println(Math.abs(15));
-                System.out.println(Math.abs(-3.14));
-                System.out.println(Math.sin(10));
-                System.out.println(Math.sin(12.34));
-                System.out.println(Math.cos(10));
-                System.out.println(Math.cos(12.34));
-                System.out.println(Math.tan(10));
-                System.out.println(Math.tan(12.34));
-                System.out.println(Math.pow(2, 3));
-                System.out.println(Math.pow(2, 3.5));
-                System.out.println(Math.pow(2.5, 3));
-                System.out.println(Math.pow(2.5, 3.5));
-                System.out.println(Math.exp(2));
-                System.out.println(Math.exp(3.14));
-                System.out.println(Math.log(25));
-                System.out.println(Math.log(12.56));
-                System.out.println(Math.log10(25));
-                System.out.println(Math.log10(12.56));
-                System.out.println(Math.sqrt(2));
-                System.out.println(Math.sqrt(31.5));
-                System.out.println(Math.round(7));
-                System.out.println((int) Math.round(8.3));
-                System.out.println((int) Math.round(12.9));
-                System.out.println((int) Math.ceil(7));
-                System.out.println((int) Math.ceil(8.3));
-                System.out.println((int) Math.ceil(12.9));
-                System.out.println((int) Math.floor(7));
-                System.out.println((int) Math.floor(8.3));
-                System.out.println((int) Math.floor(12.9));
+                """, getOutput(out -> {
+                out.println(Math.abs(15));
+                out.println(Math.abs(-3.14));
+                out.println(Math.sin(10));
+                out.println(Math.sin(12.34));
+                out.println(Math.cos(10));
+                out.println(Math.cos(12.34));
+                out.println(Math.tan(10));
+                out.println(Math.tan(12.34));
+                out.println(Math.pow(2, 3));
+                out.println(Math.pow(2, 3.5));
+                out.println(Math.pow(2.5, 3));
+                out.println(Math.pow(2.5, 3.5));
+                out.println(Math.exp(2));
+                out.println(Math.exp(3.14));
+                out.println(Math.log(25));
+                out.println(Math.log(12.56));
+                out.println(Math.log10(25));
+                out.println(Math.log10(12.56));
+                out.println(Math.sqrt(2));
+                out.println(Math.sqrt(31.5));
+                out.println(Math.round(7));
+                out.println((int) Math.round(8.3));
+                out.println((int) Math.round(12.9));
+                out.println((int) Math.ceil(7));
+                out.println((int) Math.ceil(8.3));
+                out.println((int) Math.ceil(12.9));
+                out.println((int) Math.floor(7));
+                out.println((int) Math.floor(8.3));
+                out.println((int) Math.floor(12.9));
         }));
     }
 }

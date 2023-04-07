@@ -454,16 +454,21 @@ public class ByxScriptParser {
         Expr rhs = p.getSecond();
         String op = p.getFirst().getSecond();
         switch (op) {
-            case "=":
+            case "=" -> {
                 return new Assign(lhs, rhs);
-            case "+=":
+            }
+            case "+=" -> {
                 return new Assign(lhs, new BinaryExpr(BinaryOp.Add, lhs, rhs));
-            case "-=":
+            }
+            case "-=" -> {
                 return new Assign(lhs, new BinaryExpr(BinaryOp.Sub, lhs, rhs));
-            case "*=":
+            }
+            case "*=" -> {
                 return new Assign(lhs, new BinaryExpr(BinaryOp.Mul, lhs, rhs));
-            case "/=":
+            }
+            case "/=" -> {
                 return new Assign(lhs, new BinaryExpr(BinaryOp.Div, lhs, rhs));
+            }
         }
         throw new RuntimeException("invalid assign expression: " + op);
     }

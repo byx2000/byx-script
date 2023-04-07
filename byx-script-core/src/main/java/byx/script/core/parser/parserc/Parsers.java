@@ -312,12 +312,4 @@ public class Parsers {
             throw new ParseException(cursor);
         };
     }
-
-    /*public static <R> Parser<R> not(char c) {
-        return not(ch(c));
-    }
-
-    public static <R> Parser<R> not(String s) {
-        return not(str(s));
-    }*/
 }

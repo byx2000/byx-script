@@ -335,20 +335,20 @@ public class ByxScriptTest {
                 Console.println(false + ' abc')
                 Console.println(undefined + ' xyz')
                 Console.println('xyz ' + undefined)
-                """, getOutput(() -> {
-                System.out.println(123 + 456);
-                System.out.println(123 + 3.14);
-                System.out.println(12.34 + 555);
-                System.out.println(12.34 + 56.78);
-                System.out.println("hello " + "world!");
-                System.out.println("hello " + 123);
-                System.out.println(123 + " hello");
-                System.out.println("world " + 3.14);
-                System.out.println(3.14 + " world");
-                System.out.println("abc " + true);
-                System.out.println(false + " abc");
-                System.out.println("undefined xyz");
-                System.out.println("xyz undefined");
+                """, getOutput(out -> {
+                out.println(123 + 456);
+                out.println(123 + 3.14);
+                out.println(12.34 + 555);
+                out.println(12.34 + 56.78);
+                out.println("hello " + "world!");
+                out.println("hello " + 123);
+                out.println(123 + " hello");
+                out.println("world " + 3.14);
+                out.println(3.14 + " world");
+                out.println("abc " + true);
+                out.println(false + " abc");
+                out.println("undefined xyz");
+                out.println("xyz undefined");
         }));
     }
 
@@ -359,11 +359,11 @@ public class ByxScriptTest {
                 Console.println(3.14 - 12)
                 Console.println(12 - 7.78)
                 Console.println(56.78 - 12.34)
-                """, getOutput(() -> {
-                System.out.println(532 - 34);
-                System.out.println(3.14 - 12);
-                System.out.println(12 - 7.78);
-                System.out.println(56.78 - 12.34);
+                """, getOutput(out -> {
+                out.println(532 - 34);
+                out.println(3.14 - 12);
+                out.println(12 - 7.78);
+                out.println(56.78 - 12.34);
         }));
     }
 
@@ -374,11 +374,11 @@ public class ByxScriptTest {
                 Console.println(12 * 3.4)
                 Console.println(0.12 * 34)
                 Console.println(12.34 * 56.78)
-                """, getOutput(() -> {
-                System.out.println(12 * 34);
-                System.out.println(12 * 3.4);
-                System.out.println(0.12 * 34);
-                System.out.println(12.34 * 56.78);
+                """, getOutput(out -> {
+                out.println(12 * 34);
+                out.println(12 * 3.4);
+                out.println(0.12 * 34);
+                out.println(12.34 * 56.78);
         }));
     }
 
@@ -389,11 +389,11 @@ public class ByxScriptTest {
                 Console.println(12 / 3.4)
                 Console.println(0.12 / 34)
                 Console.println(56.78 / 12.34)
-                """, getOutput(() -> {
-                System.out.println(5 / 2);
-                System.out.println(12 / 3.4);
-                System.out.println(0.12 / 34);
-                System.out.println(56.78 / 12.34);
+                """, getOutput(out -> {
+                out.println(5 / 2);
+                out.println(12 / 3.4);
+                out.println(0.12 / 34);
+                out.println(56.78 / 12.34);
         }));
     }
 
@@ -404,11 +404,11 @@ public class ByxScriptTest {
                 Console.println(12 % 5)
                 Console.println(3 % 7)
                 Console.println(6 % 3)
-                """, getOutput(() -> {
-                System.out.println(12 % 3);
-                System.out.println(12 % 5);
-                System.out.println(3 % 7);
-                System.out.println(6 % 3);
+                """, getOutput(out -> {
+                out.println(12 % 3);
+                out.println(12 % 5);
+                out.println(3 % 7);
+                out.println(6 % 3);
         }));
     }
 
@@ -695,34 +695,34 @@ public class ByxScriptTest {
                 Console.println(true && true && false)
                 Console.println(true || false || true)
                 Console.println(false || false || false)
-                """, getOutput(() -> {
-                System.out.println(2 + 3*5);
-                System.out.println((2+3) * 4 / (9-7));
-                System.out.println(2.4 / 5.774 * (6 / 3.57 + 6.37 )-2 * 7 / 5.2 + 5);
-                System.out.println(-2.4 / 5.774 * (6 / 3.57 + 6.37 )-2 * 7 / 5.2 + 5);
-                System.out.println(77.58 * (6 / 3.14+55.2234) - 2 * 6.1 / (1.0 + 2 / (4.0 - 3.8*5)));
-                System.out.println(77.58 * (6 / -3.14+55.2234) - 2 * (-6.1) / (1.0 + 2 / (4.0 - 3.8*5)));
-                System.out.println(-100);
-                System.out.println(-5 + 7);
-                System.out.println(-(5 + 7));
-                System.out.println(-3.14);
-                System.out.println(-12.34-67.5);
-                System.out.println(-(12.34-67.5));
+                """, getOutput(out -> {
+                out.println(2 + 3*5);
+                out.println((2+3) * 4 / (9-7));
+                out.println(2.4 / 5.774 * (6 / 3.57 + 6.37 )-2 * 7 / 5.2 + 5);
+                out.println(-2.4 / 5.774 * (6 / 3.57 + 6.37 )-2 * 7 / 5.2 + 5);
+                out.println(77.58 * (6 / 3.14+55.2234) - 2 * 6.1 / (1.0 + 2 / (4.0 - 3.8*5)));
+                out.println(77.58 * (6 / -3.14+55.2234) - 2 * (-6.1) / (1.0 + 2 / (4.0 - 3.8*5)));
+                out.println(-100);
+                out.println(-5 + 7);
+                out.println(-(5 + 7));
+                out.println(-3.14);
+                out.println(-12.34-67.5);
+                out.println(-(12.34-67.5));
 
-                System.out.println(true);
-                System.out.println(false);
-                System.out.println(false);
-                System.out.println(true);
-                System.out.println(true);
-                System.out.println(false);
-                System.out.println(true);
-                System.out.println(false);
-                System.out.println(true);
-                System.out.println(false);
-                System.out.println(true);
-                System.out.println(false);
-                System.out.println(true);
-                System.out.println(false);
+                out.println(true);
+                out.println(false);
+                out.println(false);
+                out.println(true);
+                out.println(true);
+                out.println(false);
+                out.println(true);
+                out.println(false);
+                out.println(true);
+                out.println(false);
+                out.println(true);
+                out.println(false);
+                out.println(true);
+                out.println(false);
         }));
     }
 
@@ -977,11 +977,11 @@ public class ByxScriptTest {
                         }
                     }
                 }
-                """, getOutput(() -> {
+                """, getOutput(out -> {
                 for (int i = 0; i < 100; ++i) {
                     for (int j = 0; j < 100; ++j) {
                         if ((i * j) % 12 == 7 && (i * j) % 23 == 11) {
-                            System.out.println(i + " " + j);
+                            out.println(i + " " + j);
                             break;
                         }
                     }
@@ -1047,12 +1047,12 @@ public class ByxScriptTest {
                 for (var i = 1; i <= 100; i++) {
                     s = s + 1.0/i
                 }
-                Console.println(s)""", getOutput(() -> {
+                Console.println(s)""", getOutput(out -> {
                 double s = 0.0;
                 for (int i = 1; i <= 100; ++i) {
                     s += 1.0 / i;
                 }
-                System.out.println(s);
+                out.println(s);
         }));
     }
 
