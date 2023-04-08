@@ -1,6 +1,6 @@
 package byx.script.core.interpreter.value;
 
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value add(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator + between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator + between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -59,7 +59,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value sub(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator - between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator - between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -68,7 +68,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value mul(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator * between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator * between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -77,7 +77,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value div(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator / between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator / between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -86,7 +86,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value rem(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator %% between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator %% between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -94,7 +94,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value neg() {
-        throw new InterpretException(String.format("unsupported operator - on %s", typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator - on %s", typeId()));
     }
 
     /**
@@ -103,7 +103,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value lessThan(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator < between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator < between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -112,7 +112,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value lessEqualThan(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator <= between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator <= between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -121,7 +121,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value greaterThan(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator > between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator > between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -130,7 +130,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value greaterEqualThan(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator >= between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator >= between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -157,7 +157,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value and(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator && between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator && between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -166,7 +166,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value or(Value rhs) {
-        throw new InterpretException(String.format("unsupported operator || between %s and %s", typeId(), rhs.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator || between %s and %s", typeId(), rhs.typeId()));
     }
 
     /**
@@ -174,7 +174,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value not() {
-        throw new InterpretException(String.format("unsupported operator ! on %s", this.typeId()));
+        throw new ByxScriptRuntimeException(String.format("unsupported operator ! on %s", this.typeId()));
     }
 
     /**
@@ -183,7 +183,7 @@ public interface Value {
      * @return 返回值
      */
     default Value call(List<Value> args) {
-        throw new InterpretException(String.format("%s is not callable", this));
+        throw new ByxScriptRuntimeException(String.format("%s is not callable", this));
     }
 
     /**
@@ -192,7 +192,7 @@ public interface Value {
      * @return 属性值
      */
     default Value getField(String field) {
-        throw new InterpretException(String.format("field %s not exist", field));
+        throw new ByxScriptRuntimeException(String.format("field %s not exist", field));
     }
 
     /**
@@ -201,7 +201,7 @@ public interface Value {
      * @param rhs 属性值
      */
     default void setField(String field, Value rhs) {
-        throw new InterpretException(String.format("unsupported field assign: %s", this));
+        throw new ByxScriptRuntimeException(String.format("unsupported field assign: %s", this));
     }
 
     /**
@@ -210,7 +210,7 @@ public interface Value {
      * @return 下标对应的值
      */
     default Value subscript(Value sub) {
-        throw new InterpretException(String.format("unsupported subscript: %s", this));
+        throw new ByxScriptRuntimeException(String.format("unsupported subscript: %s", this));
     }
 
     /**
@@ -219,6 +219,6 @@ public interface Value {
      * @param rhs rhs
      */
     default void setSubscript(Value subscript, Value rhs) {
-        throw new InterpretException(String.format("unsupported subscript assign: %s", this));
+        throw new ByxScriptRuntimeException(String.format("unsupported subscript assign: %s", this));
     }
 }

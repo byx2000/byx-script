@@ -1,6 +1,6 @@
 package byx.script.core.interpreter;
 
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 import byx.script.core.interpreter.value.Value;
 
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class Scope {
      */
     public void declareVar(String varName, Value value) {
         if (vars.containsKey(varName)) {
-            throw new InterpretException("var already exist: " + varName);
+            throw new ByxScriptRuntimeException("var already exist: " + varName);
         }
         vars.put(varName, value);
     }
@@ -54,7 +54,7 @@ public class Scope {
             }
             cur = cur.next;
         }
-        throw new InterpretException("var not exist: " + varName);
+        throw new ByxScriptRuntimeException("var not exist: " + varName);
     }
 
     /**
@@ -70,6 +70,6 @@ public class Scope {
             }
             cur = cur.next;
         }
-        throw new InterpretException("var not exist: " + varName);
+        throw new ByxScriptRuntimeException("var not exist: " + varName);
     }
 }

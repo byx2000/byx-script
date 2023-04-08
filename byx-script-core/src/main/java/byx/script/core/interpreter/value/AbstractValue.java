@@ -1,6 +1,6 @@
 package byx.script.core.interpreter.value;
 
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +36,11 @@ public abstract class AbstractValue implements Value {
     protected <T extends Value> void setCallableField(String field, Class<T> t, Function<T, Value> func) {
         setCallableField(field, args -> {
             if (args.size() != 1) {
-                throw new InterpretException(String.format("function %s need 1 argument", field));
+                throw new ByxScriptRuntimeException(String.format("function %s need 1 argument", field));
             }
             Value p = args.get(0);
             if (!t.isAssignableFrom(p.getClass())) {
-                throw new InterpretException(String.format("function %s need 1 argument with type %s", field, t.getSimpleName()));
+                throw new ByxScriptRuntimeException(String.format("function %s need 1 argument with type %s", field, t.getSimpleName()));
             }
             return func.apply(t.cast(p));
         });
@@ -56,12 +56,12 @@ public abstract class AbstractValue implements Value {
     protected <T1 extends Value, T2 extends Value> void setCallableField(String field, Class<T1> t1, Class<T2> t2, BiFunction<T1, T2, Value> func) {
         setCallableField(field, args -> {
             if (args.size() != 2) {
-                throw new InterpretException(String.format("function %s need 2 arguments", field));
+                throw new ByxScriptRuntimeException(String.format("function %s need 2 arguments", field));
             }
             Value p1 = args.get(0);
             Value p2 = args.get(1);
             if (!(t1.isAssignableFrom(p1.getClass()) && t2.isAssignableFrom(p2.getClass()))) {
-                throw new InterpretException(String.format("function %s need 2 arguments with type %s and %s",
+                throw new ByxScriptRuntimeException(String.format("function %s need 2 arguments with type %s and %s",
                         field, t1.getSimpleName(), t2.getSimpleName()));
             }
             return func.apply(t1.cast(p1), t2.cast(p2));
@@ -81,13 +81,13 @@ public abstract class AbstractValue implements Value {
     protected <T1 extends Value, T2 extends Value, T3 extends Value> void setCallableField(String field, Class<T1> t1, Class<T2> t2, Class<T3> t3, Function3<T1, T2, T3, Value> func) {
         setCallableField(field, args -> {
             if (args.size() != 3) {
-                throw new InterpretException(String.format("function %s need 3 arguments", field));
+                throw new ByxScriptRuntimeException(String.format("function %s need 3 arguments", field));
             }
             Value p1 = args.get(0);
             Value p2 = args.get(1);
             Value p3 = args.get(2);
             if (!(t1.isAssignableFrom(p1.getClass()) && t2.isAssignableFrom(p2.getClass()) && t3.isAssignableFrom(p3.getClass()))) {
-                throw new InterpretException(String.format("function %s need 2 arguments with type %s, %s and %s",
+                throw new ByxScriptRuntimeException(String.format("function %s need 2 arguments with type %s, %s and %s",
                         field, t1.getSimpleName(), t2.getSimpleName(), t3.getSimpleName()));
             }
             return func.apply(t1.cast(p1), t2.cast(p2), t3.cast(p3));

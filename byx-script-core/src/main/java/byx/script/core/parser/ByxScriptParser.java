@@ -1,6 +1,6 @@
 package byx.script.core.parser;
 
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
@@ -431,7 +431,7 @@ public class ByxScriptParser {
                 case "!=" -> expr = new BinaryExpr(BinaryOp.NotEqual, expr, p.getSecond());
                 case "&&" -> expr = new BinaryExpr(BinaryOp.And, expr, p.getSecond());
                 case "||" -> expr = new BinaryExpr(BinaryOp.Or, expr, p.getSecond());
-                default -> throw new InterpretException("unknown binary operator: " + op);
+                default -> throw new ByxScriptRuntimeException("unknown binary operator: " + op);
             }
         }
         return expr;
@@ -518,10 +518,12 @@ public class ByxScriptParser {
     public static Program parse(String script) throws ByxScriptParseException {
         try {
             return program.parse(script);
+        } catch (ByxScriptParseException e) {
+            throw e;
         } catch (ParseException e) {
             throw new ByxScriptParseException(e.getCursor(), e.getMsg());
         } catch (Exception e) {
-            throw new ByxScriptParseException("unknown error: " + e.getMessage());
+            throw new ByxScriptParseException("unknown parse exception: " + e.getMessage());
         }
     }
 }

@@ -1,6 +1,6 @@
 package byx.script.core.interpreter.value;
 
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -70,7 +70,7 @@ public class ListValue extends AbstractValue {
     @Override
     public void setSubscript(Value subscript, Value rhs) {
         if (!(subscript instanceof IntegerValue)) {
-            throw new InterpretException("subscript must be integer");
+            throw new ByxScriptRuntimeException("subscript must be integer");
         }
         int index = ((IntegerValue) subscript).getValue();
         this.elems.set(index, rhs);

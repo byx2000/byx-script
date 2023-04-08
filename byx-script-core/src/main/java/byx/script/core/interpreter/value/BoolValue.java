@@ -14,7 +14,7 @@ public class BoolValue implements Value {
 
     @Override
     public String typeId() {
-        return String.valueOf(value);
+        return "bool";
     }
 
     public static BoolValue of(boolean value) {
@@ -40,7 +40,7 @@ public class BoolValue implements Value {
 
     @Override
     public String toString() {
-        return "Bool";
+        return String.valueOf(value);
     }
 
     @Override

@@ -30,6 +30,23 @@ public class StandardLibraryTest {
 
     @Test
     public void testReflect() {
+        verify("""
+                Console.println(Reflect.typeId(123));
+                Console.println(Reflect.typeId(3.14));
+                Console.println(Reflect.typeId('hello'));
+                Console.println(Reflect.typeId(true));
+                Console.println(Reflect.typeId([1, 2, 3]));
+                Console.println(Reflect.typeId({a: 100, b: 'hi'}));
+                Console.println(Reflect.typeId(undefined));
+                """, """
+                integer
+                double
+                string
+                bool
+                list
+                object
+                undefined
+                """);
         verify("""                
                 var objs = [123, 3.14, true, 'hello', [1, 2, 3], {a: 100, b: 'hi'}, undefined]
                 

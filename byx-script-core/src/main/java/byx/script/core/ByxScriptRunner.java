@@ -1,13 +1,14 @@
 package byx.script.core;
 
 import byx.script.core.interpreter.Evaluator;
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.Scope;
 import byx.script.core.interpreter.builtin.*;
 import byx.script.core.interpreter.builtin.Math;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ByxScriptParser;
 import byx.script.core.parser.ast.Program;
+import byx.script.core.parser.exception.ByxScriptParseException;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -74,7 +75,7 @@ public class ByxScriptRunner {
             } catch (IOException ignored) {}
         }
 
-        throw new InterpretException("cannot resolve import name: " + importName);
+        throw new ByxScriptRuntimeException("cannot resolve import name: " + importName);
     }
 
     // 解析所有导入
@@ -145,7 +146,7 @@ public class ByxScriptRunner {
 
         // 检测循环依赖
         if (loadOrder.size() != imports.size()) {
-            throw new InterpretException("circular dependency");
+            throw new ByxScriptRuntimeException("circular dependency");
         }
 
         return loadOrder;
@@ -155,7 +156,7 @@ public class ByxScriptRunner {
      * 运行脚本
      * @param script 脚本字符串
      */
-    public void run(String script) {
+    public void run(String script) throws ByxScriptParseException, ByxScriptRuntimeException {
         // 解析脚本
         Program program = ByxScriptParser.parse(script);
 
@@ -180,6 +181,20 @@ public class ByxScriptRunner {
         }
 
         // 执行脚本
-        evaluator.eval(program, scope);
+        try {
+            evaluator.eval(program, scope);
+        } catch (ByxScriptRuntimeException e) {
+            throw e;
+        } catch (BreakException e) {
+            throw new ByxScriptRuntimeException("break statement only allow in loop");
+        } catch (ContinueException e) {
+            throw new ByxScriptRuntimeException("continue statement only allow in loop");
+        } catch (ReturnException e) {
+            throw new ByxScriptRuntimeException("return statement only allow in function");
+        } catch (ThrowException e) {
+            throw new ByxScriptRuntimeException("uncaught exception with value: " + e.getValue());
+        } catch (Exception e) {
+            throw new ByxScriptRuntimeException("unknown runtime exception: " + e.getMessage());
+        }
     }
 }

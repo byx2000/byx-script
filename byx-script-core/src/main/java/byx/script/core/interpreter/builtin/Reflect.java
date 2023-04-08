@@ -9,6 +9,7 @@ public class Reflect extends ObjectValue {
     public static final Reflect INSTANCE = new Reflect();
 
     private Reflect() {
+        setCallableField("typeId", Value.class, v -> Value.of(v.typeId()));
         setCallableField("isInt", Value.class, v -> Value.of(v instanceof IntegerValue));
         setCallableField("isDouble", Value.class, v -> Value.of(v instanceof DoubleValue));
         setCallableField("isBool", Value.class, v -> Value.of(v instanceof BoolValue));

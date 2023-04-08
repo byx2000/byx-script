@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ByxScriptParserTest {
-    private void verify(Executable executable, String errMsg) {
+    private void verifyException(Executable executable, String errMsg) {
         ByxScriptParseException e = assertThrowsExactly(ByxScriptParseException.class, executable);
         assertTrue(e.getMessage().contains(errMsg),
                 String.format("actual msg: %s", e.getMessage()));
@@ -17,28 +17,28 @@ public class ByxScriptParserTest {
 
     @Test
     public void testVarDeclareException() {
-        verify(() -> ByxScriptParser.parse("var "), "expect identifier");
-        verify(() -> ByxScriptParser.parse("var = 100"), "expect identifier");
-        verify(() -> ByxScriptParser.parse("var a"), "expect '='");
-        verify(() -> ByxScriptParser.parse("var a 100"), "expect '='");
-        verify(() -> ByxScriptParser.parse("var a = @#@%#$"), "invalid expression");
-        verify(() -> ByxScriptParser.parse("var a = +-"), "invalid expression");
-        verify(() -> ByxScriptParser.parse("var a = 3+(6-)"), "invalid expression");
-        verify(() -> ByxScriptParser.parse("var a = 3+*4"), "invalid expression");
+        verifyException(() -> ByxScriptParser.parse("var "), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("var = 100"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("var a"), "expect '='");
+        verifyException(() -> ByxScriptParser.parse("var a 100"), "expect '='");
+        verifyException(() -> ByxScriptParser.parse("var a = @#@%#$"), "invalid expression");
+        verifyException(() -> ByxScriptParser.parse("var a = +-"), "invalid expression");
+        verifyException(() -> ByxScriptParser.parse("var a = 3+(6-)"), "invalid expression");
+        verifyException(() -> ByxScriptParser.parse("var a = 3+*4"), "invalid expression");
     }
 
     @Test
     public void testFuncDeclareException() {
-        verify(() -> ByxScriptParser.parse("function "), "expect identifier");
-        verify(() -> ByxScriptParser.parse("function fun"), "expect '('");
-        verify(() -> ByxScriptParser.parse("function fun(a, b"), "expect ')'");
-        verify(() -> ByxScriptParser.parse("function fun(a, b) return 100"), "expect '{'");
-        verify(() -> ByxScriptParser.parse("function fun(a, b) {return 100"), "expect '}'");
-        verify(() -> ByxScriptParser.parse("function (a, b) {return 100}"), "expect identifier");
-        verify(() -> ByxScriptParser.parse("function fun(a, , b)"), "expect identifier");
-        verify(() -> ByxScriptParser.parse("function fun(, a, b)"), "expect identifier");
-        verify(() -> ByxScriptParser.parse("function fun(+-)"), "expect identifier");
-        verify(() -> ByxScriptParser.parse("function fun(a, b, )"), "expect identifier");
-        verify(() -> ByxScriptParser.parse("function fun(a, 123, b)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function "), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function fun"), "expect '('");
+        verifyException(() -> ByxScriptParser.parse("function fun(a, b"), "expect ')'");
+        verifyException(() -> ByxScriptParser.parse("function fun(a, b) return 100"), "expect '{'");
+        verifyException(() -> ByxScriptParser.parse("function fun(a, b) {return 100"), "expect '}'");
+        verifyException(() -> ByxScriptParser.parse("function (a, b) {return 100}"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function fun(a, , b)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function fun(, a, b)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function fun(+-)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function fun(a, b, )"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("function fun(a, 123, b)"), "expect identifier");
     }
 }

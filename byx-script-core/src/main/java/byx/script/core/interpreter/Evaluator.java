@@ -1,14 +1,13 @@
 package byx.script.core.interpreter;
 
-import byx.script.core.interpreter.exception.InterpretException;
-import byx.script.core.util.Pair;
+import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.value.BoolValue;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ast.ASTVisitor;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
 import byx.script.core.parser.ast.stmt.*;
-import byx.script.core.parser.exception.FastException;
+import byx.script.core.util.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -18,36 +17,6 @@ import java.util.stream.Collectors;
  * 抽象语法树求值器
  */
 public class Evaluator implements ASTVisitor<Value, Scope> {
-    private static class BreakException extends FastException {}
-    private static class ContinueException extends FastException {}
-
-    private static class ReturnException extends FastException {
-        private final Value retVal;
-
-        private ReturnException(Value retVal) {
-            this.retVal = retVal;
-        }
-
-        public Value getRetVal() {
-            return retVal;
-        }
-    }
-
-    private static class ThrowException extends FastException {
-        private final Value value;
-
-        public ThrowException(Value value) {
-            this.value = value;
-        }
-
-        public Value getValue() {
-            return value;
-        }
-    }
-
-    private static final BreakException BREAK_EXCEPTION = new BreakException();
-    private static final ContinueException CONTINUE_EXCEPTION = new ContinueException();
-
     /**
      * 对Program节点求值
      * @param program Program节点
@@ -90,7 +59,7 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
         if (v instanceof BoolValue) {
             return ((BoolValue) v).getValue();
         }
-        throw new InterpretException("condition of if, while, for statement must be bool value");
+        throw new ByxScriptRuntimeException("condition of if, while, for statement must be bool value");
     }
 
     @Override
@@ -150,12 +119,12 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
 
     @Override
     public Value visit(Break node, Scope scope) {
-        throw BREAK_EXCEPTION;
+        throw BreakException.INSTANCE;
     }
 
     @Override
     public Value visit(Continue node, Scope scope) {
-        throw CONTINUE_EXCEPTION;
+        throw ContinueException.INSTANCE;
     }
 
     @Override

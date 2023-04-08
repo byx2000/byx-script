@@ -1,6 +1,6 @@
 package byx.script.core;
 
-import byx.script.core.interpreter.exception.InterpretException;
+import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -26,7 +26,7 @@ public class ImportTest {
                 main
                 """
         );
-        verifyException(InterpretException.class, List.of(classPath.resolve("p3")), """
+        verifyException(ByxScriptRuntimeException.class, List.of(classPath.resolve("p3")), """
                 import x
                 
                 Console.println('main')
