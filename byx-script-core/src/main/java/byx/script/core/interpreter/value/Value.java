@@ -21,7 +21,7 @@ public interface Value {
     }
 
     static Value of(boolean val) {
-        return BoolValue.of(val);
+        return val ? BoolValue.TRUE : BoolValue.FALSE;
     }
 
     static Value of (String val) {
@@ -38,10 +38,6 @@ public interface Value {
 
     static Value of(List<Value> val) {
         return new ListValue(val);
-    }
-
-    static Value undefined() {
-        return UndefinedValue.INSTANCE;
     }
 
     /**

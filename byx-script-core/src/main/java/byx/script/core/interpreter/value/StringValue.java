@@ -55,8 +55,8 @@ public class StringValue extends AbstractValue {
             return new StringValue(value + ((DoubleValue) rhs).getValue());
         } else if (rhs instanceof BoolValue) {
             return new StringValue(value + ((BoolValue) rhs).getValue());
-        } else if (rhs instanceof UndefinedValue) {
-            return new StringValue(value + "undefined");
+        } else if (rhs instanceof NullValue) {
+            return new StringValue(value + "null");
         }
         return super.add(rhs);
     }
@@ -64,7 +64,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value lessThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) < 0);
+            return Value.of(value.compareTo(((StringValue) rhs).getValue()) < 0);
         }
         return super.lessThan(rhs);
     }
@@ -72,7 +72,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value lessEqualThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) <= 0);
+            return Value.of(value.compareTo(((StringValue) rhs).getValue()) <= 0);
         }
         return super.lessEqualThan(rhs);
     }
@@ -80,7 +80,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value greaterThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) > 0);
+            return Value.of(value.compareTo(((StringValue) rhs).getValue()) > 0);
         }
         return super.greaterThan(rhs);
     }
@@ -88,7 +88,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value greaterEqualThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) >= 0);
+            return Value.of(value.compareTo(((StringValue) rhs).getValue()) >= 0);
         }
         return super.greaterEqualThan(rhs);
     }
@@ -96,17 +96,17 @@ public class StringValue extends AbstractValue {
     @Override
     public Value equal(Value rhs) {
         if (rhs instanceof StringValue) {
-            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) == 0);
+            return Value.of(value.compareTo(((StringValue) rhs).getValue()) == 0);
         }
-        return BoolValue.of(false);
+        return Value.of(false);
     }
 
     @Override
     public Value notEqual(Value rhs) {
         if (rhs instanceof StringValue) {
-            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) != 0);
+            return Value.of(value.compareTo(((StringValue) rhs).getValue()) != 0);
         }
-        return BoolValue.of(true);
+        return Value.of(true);
     }
 
     @Override

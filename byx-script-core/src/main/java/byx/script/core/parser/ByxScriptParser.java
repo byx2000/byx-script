@@ -1,6 +1,7 @@
 package byx.script.core.parser;
 
 import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
+import byx.script.core.interpreter.value.NullValue;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
@@ -115,7 +116,7 @@ public class ByxScriptParser {
     private static final Parser<String> continue_ = str("continue").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> return_ = str("return").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> function_ = str("function").notFollow(identifierPart).surround(ignorable);
-    private static final Parser<String> undefined_ = str("undefined").notFollow(identifierPart).surround(ignorable);
+    private static final Parser<String> null_ = str("null").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> try_ = str("try").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> catch_ = str("catch").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> catch_fatal = withFatal(catch_, "expect 'catch'");
@@ -124,7 +125,7 @@ public class ByxScriptParser {
 
     private static final Parser<String> keywords = oneOf(
             import_, var_, if_, else_, for_, while_,
-            break_, continue_, return_, function_, undefined_,
+            break_, continue_, return_, function_, null_,
             try_, catch_, finally_, throw_
     );
 
@@ -162,7 +163,7 @@ public class ByxScriptParser {
     private static final Parser<Expr> boolLiteral = bool.map(s -> new Literal(Value.of(Boolean.parseBoolean(s))));
 
     // undefined字面量
-    private static final Parser<Expr> undefinedLiteral = undefined_.map(r -> new Literal(Value.undefined()));
+    private static final Parser<Expr> nullLiteral = null_.map(r -> new Literal(NullValue.INSTANCE));
 
     private static final Parser<List<String>> idList = oneOf(
             identifier.and(skip(comma).and(identifier_fatal).many()).map(ByxScriptParser::mapToList),
@@ -228,7 +229,7 @@ public class ByxScriptParser {
             integerLiteral,
             stringLiteral,
             boolLiteral,
-            undefinedLiteral,
+            nullLiteral,
             callableLiteral,
             var,
             objLiteral,
@@ -342,7 +343,7 @@ public class ByxScriptParser {
     private static final Parser<Statement> continueStmt = continue_.value(Continue.INSTANCE);
 
     // return语句
-    private static final Parser<Statement> returnStmt = skip(return_).and(expr.opt(new Literal(Value.undefined())))
+    private static final Parser<Statement> returnStmt = skip(return_).and(expr.opt(new Literal(NullValue.INSTANCE)))
             .map(Return::new);
 
     // try-catch-finally语句

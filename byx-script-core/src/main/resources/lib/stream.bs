@@ -55,7 +55,7 @@ var Stream = (() => {
         return filter(s.remain, predicate)
     }
 
-    var EMPTY_STREAM = createStream(undefined, undefined)
+    var EMPTY_STREAM = createStream(null, null)
 
     function fromList(list) {
         function _fromList(index) {

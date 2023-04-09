@@ -113,7 +113,7 @@ public class ByxScriptTest {
                 [100, 200, 300]
                 9
                 456
-                undefined
+                null
                 """);
         verify("""
                 var f1 = a => a + 1
@@ -152,8 +152,8 @@ public class ByxScriptTest {
                 100
                 30
                 hello
-                undefined
-                undefined
+                null
+                null
                 1001
                 """);
     }
@@ -333,8 +333,8 @@ public class ByxScriptTest {
                 Console.println(3.14 + ' world')
                 Console.println('abc ' + true)
                 Console.println(false + ' abc')
-                Console.println(undefined + ' xyz')
-                Console.println('xyz ' + undefined)
+                Console.println(null + ' xyz')
+                Console.println('xyz ' + null)
                 """, getOutput(out -> {
                 out.println(123 + 456);
                 out.println(123 + 3.14);
@@ -347,8 +347,8 @@ public class ByxScriptTest {
                 out.println(3.14 + " world");
                 out.println("abc " + true);
                 out.println(false + " abc");
-                out.println("undefined xyz");
-                out.println("xyz undefined");
+                out.println("null xyz");
+                out.println("xyz null");
         }));
     }
 
@@ -625,25 +625,25 @@ public class ByxScriptTest {
     }
 
     @Test
-    public void testUndefined() {
+    public void testNull() {
         verify("""
-                Console.println(undefined == undefined)
-                Console.println(123 == undefined)
-                Console.println(undefined == 123)
-                Console.println(3.14 == undefined)
-                Console.println(undefined == 3.14)
-                Console.println('hello' == undefined)
-                Console.println(undefined == 'hello')
-                Console.println([] == undefined)
-                Console.println(undefined == [])
-                Console.println([1, 2, 3] == undefined)
-                Console.println(undefined == [1, 2, 3])
-                Console.println({} == undefined)
-                Console.println(undefined == {})
-                Console.println({m: 100} == undefined)
-                Console.println(undefined == {m: 100})
-                Console.println((a => a + 1) == undefined)
-                Console.println(undefined == (a => a + 1))
+                Console.println(null == null)
+                Console.println(123 == null)
+                Console.println(null == 123)
+                Console.println(3.14 == null)
+                Console.println(null == 3.14)
+                Console.println('hello' == null)
+                Console.println(null == 'hello')
+                Console.println([] == null)
+                Console.println(null == [])
+                Console.println([1, 2, 3] == null)
+                Console.println(null == [1, 2, 3])
+                Console.println({} == null)
+                Console.println(null == {})
+                Console.println({m: 100} == null)
+                Console.println(null == {m: 100})
+                Console.println((a => a + 1) == null)
+                Console.println(null == (a => a + 1))
                 """, """
                 true
                 false

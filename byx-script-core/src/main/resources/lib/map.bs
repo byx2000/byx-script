@@ -3,7 +3,7 @@
  * capacity: 哈希桶数量
  */
 function Map(capacity) {
-    if (capacity == undefined) {
+    if (capacity == null) {
         capacity = 10
     }
 
@@ -39,7 +39,7 @@ function Map(capacity) {
             }
             elems[index].addLast(Pair(key, value))
             size++
-            return undefined
+            return null
         },
         get(key) {
             var hashCode = getHashCode(key)
@@ -49,7 +49,7 @@ function Map(capacity) {
                     return elems[index][i].value
                 }
             }
-            return undefined
+            return null
         },
         remove(key) {
             var hashCode = getHashCode(key)
@@ -60,7 +60,7 @@ function Map(capacity) {
                     return elems[index].remove(i).value
                 }
             }
-            return undefined
+            return null
         },
         containsKey(key) {
             var hashCode = getHashCode(key)

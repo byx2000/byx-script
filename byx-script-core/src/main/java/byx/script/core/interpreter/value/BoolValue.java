@@ -3,8 +3,8 @@ package byx.script.core.interpreter.value;
 import java.util.Objects;
 
 public class BoolValue implements Value {
-    private static final BoolValue TRUE = new BoolValue(true);
-    private static final BoolValue FALSE = new BoolValue(false);
+    public static final BoolValue TRUE = new BoolValue(true);
+    public static final BoolValue FALSE = new BoolValue(false);
 
     private final boolean value;
 
@@ -15,10 +15,6 @@ public class BoolValue implements Value {
     @Override
     public String typeId() {
         return "bool";
-    }
-
-    public static BoolValue of(boolean value) {
-        return value ? TRUE : FALSE;
     }
 
     public boolean getValue() {

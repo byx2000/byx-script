@@ -17,7 +17,7 @@ public class SampleTest {
                 function preorderTraverse(root) {
                     var result = []
                     function doTraverse(root) {
-                        if (root == undefined) {
+                        if (root == null) {
                             return
                         }
                         result.addLast(root.val)
@@ -32,7 +32,7 @@ public class SampleTest {
                 function inorderTraverse(root) {
                     var result = []
                     function doTraverse(root) {
-                        if (root == undefined) {
+                        if (root == null) {
                             return
                         }
                         doTraverse(root.left)
@@ -47,7 +47,7 @@ public class SampleTest {
                 function postorderTraverse(root) {
                     var result = []
                     function doTraverse(root) {
-                        if (root == undefined) {
+                        if (root == null) {
                             return
                         }
                         doTraverse(root.left)
@@ -67,10 +67,10 @@ public class SampleTest {
                         for (var i = 0; i < cnt; ++i) {
                             var n = queue.removeFirst()
                             result.addLast(n.val)
-                            if (n.left != undefined) {
+                            if (n.left != null) {
                                 queue.addLast(n.left)
                             }
-                            if (n.right != undefined) {
+                            if (n.right != null) {
                                 queue.addLast(n.right)
                             }
                         }
@@ -78,7 +78,7 @@ public class SampleTest {
                     return result
                 }
                                 
-                var root = TreeNode(1, TreeNode(2, TreeNode(4, TreeNode(7), undefined), TreeNode(5)), TreeNode(3, undefined, TreeNode(6)))
+                var root = TreeNode(1, TreeNode(2, TreeNode(4, TreeNode(7), null), TreeNode(5)), TreeNode(3, null, TreeNode(6)))
                                 
                 Console.println(preorderTraverse(root))
                 Console.println(inorderTraverse(root))
@@ -389,12 +389,12 @@ public class SampleTest {
                     for (var i = 0; i < s.length(); ++i) {
                         cache.addLast([])
                         for (var j = 0; j < s.length(); ++j) {
-                            cache[i].addLast(undefined)
+                            cache[i].addLast(null)
                         }
                     }
                      
                     function isPalindrome(i, j) {
-                        if (cache[i][j] != undefined) {
+                        if (cache[i][j] != null) {
                             return cache[i][j]
                         }
                  
@@ -548,7 +548,7 @@ public class SampleTest {
                 function toList(head) {
                     var result = []
                     function traverse(head) {
-                        if (head == undefined) {
+                        if (head == null) {
                             return
                         }
                         result.addLast(head.val)
@@ -560,13 +560,13 @@ public class SampleTest {
                                 
                 // 反转链表
                 function reverse(head) {
-                    if (head == undefined || head.next == undefined) {
+                    if (head == null || head.next == null) {
                         return head
                     }
                     var p = head.next
                     var q = reverse(head.next)
                     p.next = head
-                    head.next = undefined
+                    head.next = null
                     return q
                 }
                                 

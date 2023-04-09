@@ -1,24 +1,24 @@
 package byx.script.core.interpreter.value;
 
-public class UndefinedValue implements Value {
-    public static UndefinedValue INSTANCE = new UndefinedValue();
+public class NullValue implements Value {
+    public static NullValue INSTANCE = new NullValue();
 
-    private UndefinedValue() {}
+    private NullValue() {}
 
     @Override
     public String toString() {
-        return "undefined";
+        return "null";
     }
 
     @Override
     public String typeId() {
-        return "undefined";
+        return "null";
     }
 
     @Override
     public Value add(Value rhs) {
         if (rhs instanceof StringValue) {
-            return new StringValue("undefined" + ((StringValue) rhs).getValue());
+            return new StringValue("null" + ((StringValue) rhs).getValue());
         }
         return Value.super.add(rhs);
     }

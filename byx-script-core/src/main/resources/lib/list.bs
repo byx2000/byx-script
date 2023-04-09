@@ -32,7 +32,7 @@ var List = (() => {
          *     cmp(a, b) > 0  表示 a 大于 b
          */
         sort: (list, cmp) => {
-            if (cmp == undefined) {
+            if (cmp == null) {
                 cmp = (a, b) => a - b
             }
 

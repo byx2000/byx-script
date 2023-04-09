@@ -7,4 +7,8 @@ public class ByxScriptRuntimeException extends RuntimeException {
     public ByxScriptRuntimeException(String msg) {
         super(msg);
     }
+
+    public ByxScriptRuntimeException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

@@ -2,6 +2,7 @@ package byx.script.core.interpreter;
 
 import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.value.BoolValue;
+import byx.script.core.interpreter.value.NullValue;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ast.ASTVisitor;
 import byx.script.core.parser.ast.Program;
@@ -184,7 +185,7 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
                 if (i < args.size()) {
                     newScope.declareVar(params.get(i), args.get(i));
                 } else {
-                    newScope.declareVar(params.get(i), Value.undefined());
+                    newScope.declareVar(params.get(i), NullValue.INSTANCE);
                 }
             }
 
@@ -194,7 +195,7 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
             } catch (ReturnException e) {
                 return e.getRetVal();
             }
-            return Value.undefined();
+            return NullValue.INSTANCE;
         });
     }
 
@@ -216,7 +217,7 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
         Value v1 = lhs.visit(this, scope);
         // 实现短路特性
         if (v1 instanceof BoolValue && !((BoolValue) v1).getValue()) {
-            return Value.of(false);
+            return BoolValue.FALSE;
         }
         return v1.and(rhs.visit(this, scope));
     }
@@ -225,7 +226,7 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
         Value v2 = lhs.visit(this, scope);
         // 实现短路特性
         if (v2 instanceof BoolValue && ((BoolValue) v2).getValue()) {
-            return Value.of(true);
+            return BoolValue.TRUE;
         }
         return v2.or(rhs.visit(this, scope));
     }

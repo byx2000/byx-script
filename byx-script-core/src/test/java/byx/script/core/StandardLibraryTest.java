@@ -2,137 +2,10 @@ package byx.script.core;
 
 import org.junit.jupiter.api.Test;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
-
 import static byx.script.core.TestUtils.getOutput;
+import static byx.script.core.TestUtils.verify;
 
 public class StandardLibraryTest {
-    private static final Path LIB_PATH;
-
-    static {
-        try {
-            LIB_PATH = Path.of(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("lib")).toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("load lib path failed", e);
-        }
-    }
-
-    private void verify(String script, String expectedOutput) {
-        TestUtils.verify(List.of(LIB_PATH), script, expectedOutput);
-    }
-
-    private void verify(String script, String input, String expectedOutput) {
-        TestUtils.verify(List.of(LIB_PATH), script, input, expectedOutput);
-    }
-
-    @Test
-    public void testReflect() {
-        verify("""
-                Console.println(Reflect.typeId(123));
-                Console.println(Reflect.typeId(3.14));
-                Console.println(Reflect.typeId('hello'));
-                Console.println(Reflect.typeId(true));
-                Console.println(Reflect.typeId([1, 2, 3]));
-                Console.println(Reflect.typeId({a: 100, b: 'hi'}));
-                Console.println(Reflect.typeId(undefined));
-                """, """
-                integer
-                double
-                string
-                bool
-                list
-                object
-                undefined
-                """);
-        verify("""                
-                var objs = [123, 3.14, true, 'hello', [1, 2, 3], {a: 100, b: 'hi'}, undefined]
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isInt(objs[i]) + ' ')
-                }
-                Console.println()
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isDouble(objs[i]) + ' ')
-                }
-                Console.println()
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isBool(objs[i]) + ' ')
-                }
-                Console.println()
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isString(objs[i]) + ' ')
-                }
-                Console.println()
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isList(objs[i]) + ' ')
-                }
-                Console.println()
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isObject(objs[i]) + ' ')
-                }
-                Console.println()
-                
-                for (var i = 0; i < objs.length(); ++i) {
-                    Console.print(Reflect.isUndefined(objs[i]) + ' ')
-                }
-                Console.println()
-                """, """
-                true false false false false false false
-                false true false false false false false
-                false false true false false false false
-                false false false true false false false
-                false false false false true false false
-                false false false false false true false
-                false false false false false false true
-                """);
-        verify("""                
-                var objs = [123, 3.14, true, 'hello', [1, 2, 3], {a: 100, b: 'hi'}, undefined]
-                for (var i = 0; i < objs.length(); ++i) {
-                    for (var j = 0; j < objs.length(); ++j) {
-                        Console.print((Reflect.hashCode(objs[i]) == Reflect.hashCode(objs[j])) + ' ')
-                    }
-                    Console.println()
-                }
-                """, """
-                true false false false false false false
-                false true false false false false false
-                false false true false false false false
-                false false false true false false false
-                false false false false true false false
-                false false false false false true false
-                false false false false false false true
-                """);
-        verify("""                
-                var obj = {a: 123, b: 'hello'}
-                var fields = Reflect.fields(obj)
-                Console.println(fields == ['a', 'b'] || fields == ['b', 'a'])
-                
-                Reflect.setField(obj, 'a', 456)
-                Console.println(obj.a)
-                
-                Console.println(Reflect.getField(obj, 'b'))
-                
-                Console.println(Reflect.hasField(obj, 'a'))
-                Console.println(Reflect.hasField(obj, 'b'))
-                Console.println(Reflect.hasField(obj, 'c'))
-                """, """
-                true
-                456
-                hello
-                true
-                true
-                false
-                """);
-    }
-
     @Test
     public void testStack() {
         verify("""
@@ -402,14 +275,14 @@ public class StandardLibraryTest {
                 123
                 456
                 789
-                undefined
+                null
                 true
                 true
                 true
                 false
                 456
                 12345
-                undefined
+                null
                 123
                 2
                 """);
@@ -424,7 +297,7 @@ public class StandardLibraryTest {
                         }
                         map.put(nums[i], i)
                     }
-                    return undefined
+                    return null
                 }
                 
                 Console.println(twoSum([2, 7, 11, 15], 9))
@@ -436,56 +309,6 @@ public class StandardLibraryTest {
                 [1, 2]
                 [0, 1]
                 [7, 9]
-                """);
-    }
-
-    @Test
-    public void testReader() {
-        verify("""                
-                while (Reader.hasNext()) {
-                    var line = Reader.nextLine()
-                    Console.println(line)
-                }
-                """, """
-                hello
-                world!
-                this is the example
-                """, """
-                hello
-                world!
-                this is the example
-                """);
-        verify("""                
-                while (Reader.hasNext()) {
-                    var a = Reader.nextInt()
-                    var b = Reader.nextInt()
-                    Console.println(a + b)
-                }
-                """, """
-                1 2 45 77
-                400
-                500
-                """, """
-                3
-                122
-                900
-                """);
-        verify("""                
-                var nums = []
-                while (Reader.hasNext()) {
-                    nums.addLast(Reader.nextInt())
-                }
-                
-                var sum = 0
-                for (var i = 0; i < nums.length(); ++i) {
-                    sum += nums[i]
-                }
-                
-                Console.println(sum)
-                """, """
-                23 17 56 124 4 85
-                """, """
-                309
                 """);
     }
 
@@ -524,35 +347,35 @@ public class StandardLibraryTest {
                 Console.println(Math.floor(8.3))
                 Console.println(Math.floor(12.9))
                 """, getOutput(out -> {
-                out.println(Math.abs(15));
-                out.println(Math.abs(-3.14));
-                out.println(Math.sin(10));
-                out.println(Math.sin(12.34));
-                out.println(Math.cos(10));
-                out.println(Math.cos(12.34));
-                out.println(Math.tan(10));
-                out.println(Math.tan(12.34));
-                out.println(Math.pow(2, 3));
-                out.println(Math.pow(2, 3.5));
-                out.println(Math.pow(2.5, 3));
-                out.println(Math.pow(2.5, 3.5));
-                out.println(Math.exp(2));
-                out.println(Math.exp(3.14));
-                out.println(Math.log(25));
-                out.println(Math.log(12.56));
-                out.println(Math.log10(25));
-                out.println(Math.log10(12.56));
-                out.println(Math.sqrt(2));
-                out.println(Math.sqrt(31.5));
-                out.println(Math.round(7));
-                out.println((int) Math.round(8.3));
-                out.println((int) Math.round(12.9));
-                out.println((int) Math.ceil(7));
-                out.println((int) Math.ceil(8.3));
-                out.println((int) Math.ceil(12.9));
-                out.println((int) Math.floor(7));
-                out.println((int) Math.floor(8.3));
-                out.println((int) Math.floor(12.9));
+            out.println(Math.abs(15));
+            out.println(Math.abs(-3.14));
+            out.println(Math.sin(10));
+            out.println(Math.sin(12.34));
+            out.println(Math.cos(10));
+            out.println(Math.cos(12.34));
+            out.println(Math.tan(10));
+            out.println(Math.tan(12.34));
+            out.println(Math.pow(2, 3));
+            out.println(Math.pow(2, 3.5));
+            out.println(Math.pow(2.5, 3));
+            out.println(Math.pow(2.5, 3.5));
+            out.println(Math.exp(2));
+            out.println(Math.exp(3.14));
+            out.println(Math.log(25));
+            out.println(Math.log(12.56));
+            out.println(Math.log10(25));
+            out.println(Math.log10(12.56));
+            out.println(Math.sqrt(2));
+            out.println(Math.sqrt(31.5));
+            out.println(Math.round(7));
+            out.println((int) Math.round(8.3));
+            out.println((int) Math.round(12.9));
+            out.println((int) Math.ceil(7));
+            out.println((int) Math.ceil(8.3));
+            out.println((int) Math.ceil(12.9));
+            out.println((int) Math.floor(7));
+            out.println((int) Math.floor(8.3));
+            out.println((int) Math.floor(12.9));
         }));
     }
 }

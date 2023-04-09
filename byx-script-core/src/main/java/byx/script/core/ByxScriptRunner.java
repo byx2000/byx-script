@@ -1,10 +1,12 @@
 package byx.script.core;
 
 import byx.script.core.interpreter.Evaluator;
-import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.Scope;
-import byx.script.core.interpreter.builtin.*;
+import byx.script.core.interpreter.builtin.Console;
 import byx.script.core.interpreter.builtin.Math;
+import byx.script.core.interpreter.builtin.Reader;
+import byx.script.core.interpreter.builtin.Reflect;
+import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ByxScriptParser;
 import byx.script.core.parser.ast.Program;
@@ -12,6 +14,7 @@ import byx.script.core.parser.exception.ByxScriptParseException;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -31,14 +34,19 @@ public class ByxScriptRunner {
     }
 
     public ByxScriptRunner(Scanner scanner, PrintStream printStream) {
-        // 添加默认导入路径（当前路径）
-        addImportPath(Path.of("").toAbsolutePath());
+        try {
+            // 添加默认导入路径（当前路径）
+            addImportPath(Path.of("").toAbsolutePath());
+            addImportPath(Path.of(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("lib")).toURI()));
 
-        // 添加内建对象
-        addBuiltin("Console", new Console(printStream));
-        addBuiltin("Reader", new Reader(scanner));
-        addBuiltin("Reflect", Reflect.INSTANCE);
-        addBuiltin("Math", Math.INSTANCE);
+            // 添加内建对象
+            addBuiltin("Console", new Console(printStream));
+            addBuiltin("Reader", new Reader(scanner));
+            addBuiltin("Reflect", Reflect.INSTANCE);
+            addBuiltin("Math", Math.INSTANCE);
+        } catch (URISyntaxException e) {
+            throw new ByxScriptRuntimeException("load lib path failed", e);
+        }
     }
 
     /**

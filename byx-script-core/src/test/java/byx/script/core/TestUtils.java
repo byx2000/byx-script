@@ -22,6 +22,10 @@ public class TestUtils {
         verify(Collections.emptyList(), script, "", expectedOutput);
     }
 
+    public static void verify(String script, String input, String expectedOutput) {
+        verify(Collections.emptyList(), script, input, expectedOutput);
+    }
+
     public static void verify(List<Path> importPaths, String script, String expectedOutput) {
         verify(importPaths, script, "", expectedOutput);
     }

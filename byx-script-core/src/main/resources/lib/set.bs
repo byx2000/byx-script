@@ -3,7 +3,7 @@
  * capacity: 底层哈希表的初始容量
  */
 function Set(capacity) {
-    if (capacity == undefined) {
+    if (capacity == null) {
         capacity = 10
     }
 

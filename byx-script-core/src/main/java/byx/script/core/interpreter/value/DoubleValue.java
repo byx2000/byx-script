@@ -87,9 +87,9 @@ public class DoubleValue implements Value {
     @Override
     public Value lessThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return BoolValue.of(value < ((IntegerValue) rhs).getValue());
+            return Value.of(value < ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return BoolValue.of(value < ((DoubleValue) rhs).getValue());
+            return Value.of(value < ((DoubleValue) rhs).getValue());
         }
         return Value.super.lessThan(rhs);
     }
@@ -97,9 +97,9 @@ public class DoubleValue implements Value {
     @Override
     public Value lessEqualThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return BoolValue.of(value <= ((IntegerValue) rhs).getValue());
+            return Value.of(value <= ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return BoolValue.of(value <= ((DoubleValue) rhs).getValue());
+            return Value.of(value <= ((DoubleValue) rhs).getValue());
         }
         return Value.super.lessEqualThan(rhs);
     }
@@ -107,9 +107,9 @@ public class DoubleValue implements Value {
     @Override
     public Value greaterThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return BoolValue.of(value > ((IntegerValue) rhs).getValue());
+            return Value.of(value > ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return BoolValue.of(value > ((DoubleValue) rhs).getValue());
+            return Value.of(value > ((DoubleValue) rhs).getValue());
         }
         return Value.super.greaterThan(rhs);
     }
@@ -117,9 +117,9 @@ public class DoubleValue implements Value {
     @Override
     public Value greaterEqualThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return BoolValue.of(value >= ((IntegerValue) rhs).getValue());
+            return Value.of(value >= ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return BoolValue.of(value >= ((DoubleValue) rhs).getValue());
+            return Value.of(value >= ((DoubleValue) rhs).getValue());
         }
         return Value.super.greaterEqualThan(rhs);
     }
@@ -127,16 +127,16 @@ public class DoubleValue implements Value {
     @Override
     public Value equal(Value rhs) {
         if (rhs instanceof DoubleValue) {
-            return BoolValue.of(value == ((DoubleValue) rhs).getValue());
+            return Value.of(value == ((DoubleValue) rhs).getValue());
         }
-        return BoolValue.of(false);
+        return Value.of(false);
     }
 
     @Override
     public Value notEqual(Value rhs) {
         if (rhs instanceof DoubleValue) {
-            return BoolValue.of(value != ((DoubleValue) rhs).getValue());
+            return Value.of(value != ((DoubleValue) rhs).getValue());
         }
-        return BoolValue.of(true);
+        return Value.of(true);
     }
 }

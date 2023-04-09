@@ -25,7 +25,7 @@ public abstract class AbstractValue implements Value {
     protected void setCallableFieldNoReturn(String field, Consumer<List<Value>> callable) {
         setCallableField(field, args -> {
             callable.accept(args);
-            return Value.undefined();
+            return NullValue.INSTANCE;
         });
     }
 
@@ -49,7 +49,7 @@ public abstract class AbstractValue implements Value {
     protected <T extends Value> void setCallableFieldNoReturn(String field, Class<T> t, Consumer<T> func) {
         setCallableField(field, t, p -> {
             func.accept(p);
-            return Value.undefined();
+            return NullValue.INSTANCE;
         });
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractValue implements Value {
     protected <T1 extends Value, T2 extends Value> void setCallableFieldNoReturn(String field, Class<T1> t1, Class<T2> t2, BiConsumer<T1, T2> func) {
         setCallableField(field, t1, t2, (p1, p2) -> {
             func.accept(p1, p2);
-            return Value.undefined();
+            return NullValue.INSTANCE;
         });
     }
 
@@ -101,7 +101,7 @@ public abstract class AbstractValue implements Value {
     protected <T1 extends Value, T2 extends Value, T3 extends Value> void setCallableFieldNoReturn(String field, Class<T1> t1, Class<T2> t2, Class<T3> t3, Consumer3<T1, T2, T3> func) {
         setCallableField(field, t1, t2, t3, (p1, p2, p3) -> {
             func.accept(p1, p2, p3);
-            return Value.undefined();
+            return NullValue.INSTANCE;
         });
     }
 
