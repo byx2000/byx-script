@@ -1,21 +1,24 @@
 package byx.script.core.interpreter.value;
 
+import java.util.List;
 import java.util.Objects;
 
-public class StringValue extends AbstractValue {
+public class StringValue extends ObjectValue {
     private final String value;
 
     public StringValue(String value) {
         this.value = value;
-        setCallableField("length", () -> Value.of(value.length()));
-        setCallableField("substring", IntegerValue.class, IntegerValue.class, (start, end) -> Value.of(value.substring(start.getValue(), end.getValue())));
-        setCallableField("concat", StringValue.class, s -> Value.of(value.concat(s.getValue())));
-        setCallableField("charAt", IntegerValue.class, index -> Value.of(String.valueOf(value.charAt(index.getValue()))));
-        setCallableField("codeAt", IntegerValue.class, index -> Value.of(value.charAt(index.getValue())));
-        setCallableField("compareTo", StringValue.class, s -> Value.of(value.compareTo(s.getValue())));
-        setCallableField("toInt", () -> Value.of(Integer.parseInt(value)));
-        setCallableField("toDouble", () -> Value.of(Double.parseDouble(value)));
-        setCallableField("toBool", () -> Value.of(Boolean.parseBoolean(value)));
+
+        // 添加内建属性
+        setCallableField("length", this::length);
+        setCallableField("substring", this::substring);
+        setCallableField("concat", this::concat);
+        setCallableField("charAt", this::charAt);
+        setCallableField("codeAt", this::codeAt);
+        setCallableField("compareTo", this::compareTo);
+        setCallableField("toInt", this::toInt);
+        setCallableField("toDouble", this::toDouble);
+        setCallableField("toBool", this::toBool);
     }
 
     public String getValue() {
@@ -41,11 +44,6 @@ public class StringValue extends AbstractValue {
     }
 
     @Override
-    public String typeId() {
-        return "string";
-    }
-
-    @Override
     public Value add(Value rhs) {
         if (rhs instanceof StringValue) {
             return new StringValue(value + ((StringValue) rhs).getValue());
@@ -64,7 +62,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value lessThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return Value.of(value.compareTo(((StringValue) rhs).getValue()) < 0);
+            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) < 0);
         }
         return super.lessThan(rhs);
     }
@@ -72,7 +70,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value lessEqualThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return Value.of(value.compareTo(((StringValue) rhs).getValue()) <= 0);
+            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) <= 0);
         }
         return super.lessEqualThan(rhs);
     }
@@ -80,7 +78,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value greaterThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return Value.of(value.compareTo(((StringValue) rhs).getValue()) > 0);
+            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) > 0);
         }
         return super.greaterThan(rhs);
     }
@@ -88,7 +86,7 @@ public class StringValue extends AbstractValue {
     @Override
     public Value greaterEqualThan(Value rhs) {
         if (rhs instanceof StringValue) {
-            return Value.of(value.compareTo(((StringValue) rhs).getValue()) >= 0);
+            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) >= 0);
         }
         return super.greaterEqualThan(rhs);
     }
@@ -96,25 +94,72 @@ public class StringValue extends AbstractValue {
     @Override
     public Value equal(Value rhs) {
         if (rhs instanceof StringValue) {
-            return Value.of(value.compareTo(((StringValue) rhs).getValue()) == 0);
+            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) == 0);
         }
-        return Value.of(false);
+        return BoolValue.FALSE;
     }
 
     @Override
     public Value notEqual(Value rhs) {
         if (rhs instanceof StringValue) {
-            return Value.of(value.compareTo(((StringValue) rhs).getValue()) != 0);
+            return BoolValue.of(value.compareTo(((StringValue) rhs).getValue()) != 0);
         }
-        return Value.of(true);
+        return BoolValue.TRUE;
     }
 
     @Override
     public Value subscript(Value sub) {
         if (sub instanceof IntegerValue) {
             int index = ((IntegerValue) sub).getValue();
-            return Value.of(String.valueOf(value.charAt(index)));
+            return new StringValue(String.valueOf(value.charAt(index)));
         }
         return super.subscript(sub);
+    }
+
+    private Value length(List<Value> args) {
+        return new IntegerValue(value.length());
+    }
+
+    private Value substring(List<Value> args) {
+        checkArgument("substring", args, IntegerValue.class, IntegerValue.class);
+        int begin = ((IntegerValue) args.get(0)).getValue();
+        int end = ((IntegerValue) args.get(1)).getValue();
+        return new StringValue(value.substring(begin, end));
+    }
+
+    private Value concat(List<Value> args) {
+        checkArgument("concat", args, StringValue.class);
+        String s = ((StringValue) args.get(0)).getValue();
+        return new StringValue(value.concat(s));
+    }
+
+    private Value charAt(List<Value> args) {
+        checkArgument("charAt", args, IntegerValue.class);
+        int index = ((IntegerValue) args.get(0)).getValue();
+        return new StringValue(String.valueOf(value.charAt(index)));
+    }
+
+    private Value codeAt(List<Value> args) {
+        checkArgument("codeAt", args, IntegerValue.class);
+        int index = ((IntegerValue) args.get(0)).getValue();
+        return new IntegerValue(value.charAt(index));
+    }
+
+    private Value compareTo(List<Value> args) {
+        checkArgument("compareTo", args, StringValue.class);
+        String s = ((StringValue) args.get(0)).getValue();
+        return new IntegerValue(value.compareTo(s));
+    }
+
+    private Value toInt(List<Value> args) {
+        return new IntegerValue(Integer.parseInt(value));
+    }
+
+    private Value toDouble(List<Value> args) {
+        return new DoubleValue(Double.parseDouble(value));
+    }
+
+    private Value toBool(List<Value> args) {
+        return BoolValue.of(Boolean.parseBoolean(value));
     }
 }

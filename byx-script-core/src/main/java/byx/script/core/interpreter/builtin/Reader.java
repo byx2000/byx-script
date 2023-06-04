@@ -1,7 +1,6 @@
 package byx.script.core.interpreter.builtin;
 
-import byx.script.core.interpreter.value.ObjectValue;
-import byx.script.core.interpreter.value.Value;
+import byx.script.core.interpreter.value.*;
 
 import java.util.Scanner;
 
@@ -10,10 +9,11 @@ import java.util.Scanner;
  */
 public class Reader extends ObjectValue {
     public Reader(Scanner scanner) {
-        setCallableField("nextLine", () -> Value.of(scanner.nextLine()));
-        setCallableField("nextInt", () -> Value.of(scanner.nextInt()));
-        setCallableField("nextDouble", () -> Value.of(scanner.nextDouble()));
-        setCallableField("nextBool", () -> Value.of(scanner.nextBoolean()));
-        setCallableField("hasNext", () -> Value.of(scanner.hasNext()));
+        // 添加内建属性
+        setCallableField("nextLine", args -> new StringValue(scanner.nextLine()));
+        setCallableField("nextInt", args -> new IntegerValue(scanner.nextInt()));
+        setCallableField("nextDouble", args -> new DoubleValue(scanner.nextDouble()));
+        setCallableField("nextBool", args -> BoolValue.of(scanner.nextBoolean()));
+        setCallableField("hasNext", args -> BoolValue.of(scanner.hasNext()));
     }
 }

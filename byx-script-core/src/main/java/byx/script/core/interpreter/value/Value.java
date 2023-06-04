@@ -4,40 +4,25 @@ import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * 封装ByxScript运行时的值类型
  */
 public interface Value {
-    String typeId();
+    Map<Class<? extends Value>, String> TYPE_ID_MAP = Map.of(
+            Value.class, "any",
+            NullValue.class, "null",
+            IntegerValue.class, "integer",
+            DoubleValue.class, "double",
+            BoolValue.class, "bool",
+            StringValue.class, "string",
+            ListValue.class, "list",
+            CallableValue.class, "callable",
+            ObjectValue.class, "object"
+    );
 
-    static Value of(int val) {
-        return new IntegerValue(val);
-    }
-
-    static Value of (double val) {
-        return new DoubleValue(val);
-    }
-
-    static Value of(boolean val) {
-        return val ? BoolValue.TRUE : BoolValue.FALSE;
-    }
-
-    static Value of (String val) {
-        return new StringValue(val);
-    }
-
-    static Value of(Function<List<Value>, Value> callable) {
-        return new CallableValue(callable);
-    }
-
-    static Value of(Map<String, Value> val) {
-        return new ObjectValue(val);
-    }
-
-    static Value of(List<Value> val) {
-        return new ListValue(val);
+    default String typeId() {
+        return TYPE_ID_MAP.getOrDefault(getClass(), "unknown");
     }
 
     /**
@@ -135,7 +120,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value equal(Value rhs) {
-        return Value.of(this == rhs);
+        return BoolValue.of(this == rhs);
     }
 
     /**
@@ -144,7 +129,7 @@ public interface Value {
      * @return 运算结果
      */
     default Value notEqual(Value rhs) {
-        return Value.of(this != rhs);
+        return BoolValue.of(this != rhs);
     }
 
     /**

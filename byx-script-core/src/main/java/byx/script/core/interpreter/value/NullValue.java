@@ -11,11 +11,6 @@ public class NullValue implements Value {
     }
 
     @Override
-    public String typeId() {
-        return "null";
-    }
-
-    @Override
     public Value add(Value rhs) {
         if (rhs instanceof StringValue) {
             return new StringValue("null" + ((StringValue) rhs).getValue());

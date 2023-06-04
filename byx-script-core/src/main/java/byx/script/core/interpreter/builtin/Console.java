@@ -11,9 +11,14 @@ import java.util.stream.Collectors;
  * 内建对象，输出
  */
 public class Console extends ObjectValue {
+    private final PrintStream printStream;
+
     public Console(PrintStream printStream) {
-        setCallableFieldNoReturn("println", args -> printStream.println(args.stream().map(v -> valueToString(v, true)).collect(Collectors.joining(" "))));
-        setCallableFieldNoReturn("print", args -> printStream.print(args.stream().map(v -> valueToString(v, true)).collect(Collectors.joining(" "))));
+        this.printStream = printStream;
+
+        // 添加内建属性
+        setCallableField("println", this::println);
+        setCallableField("print", this::print);
     }
 
     // 将Value转换成可打印的字符串
@@ -45,5 +50,15 @@ public class Console extends ObjectValue {
         } else {
             return value.toString();
         }
+    }
+
+    private Value println(List<Value> args) {
+        printStream.println(args.stream().map(v -> valueToString(v, true)).collect(Collectors.joining(" ")));
+        return NullValue.INSTANCE;
+    }
+
+    private Value print(List<Value> args) {
+        printStream.print(args.stream().map(v -> valueToString(v, true)).collect(Collectors.joining(" ")));
+        return NullValue.INSTANCE;
     }
 }

@@ -1,9 +1,7 @@
 package byx.script.core.interpreter;
 
 import byx.script.core.interpreter.exception.*;
-import byx.script.core.interpreter.value.BoolValue;
-import byx.script.core.interpreter.value.NullValue;
-import byx.script.core.interpreter.value.Value;
+import byx.script.core.interpreter.value.*;
 import byx.script.core.parser.ast.ASTVisitor;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
@@ -165,12 +163,12 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
 
     @Override
     public Value visit(ListLiteral node, Scope scope) {
-        return Value.of(node.getElems().stream().map(e -> e.visit(this, scope)).collect(Collectors.toList()));
+        return new ListValue(node.getElems().stream().map(e -> e.visit(this, scope)).collect(Collectors.toList()));
     }
 
     @Override
     public Value visit(ObjectLiteral node, Scope scope) {
-        return Value.of(node.getFields().entrySet().stream()
+        return new ObjectValue(node.getFields().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().visit(this, scope))));
     }
 
@@ -178,7 +176,7 @@ public class Evaluator implements ASTVisitor<Value, Scope> {
     public Value visit(CallableLiteral node, Scope scope) {
         List<String> params = node.getParams();
         Statement body = node.getBody();
-        return Value.of(args -> {
+        return new CallableValue(args -> {
             // 传递实参
             Scope newScope = new Scope(scope);
             for (int i = 0; i < params.size(); ++i) {

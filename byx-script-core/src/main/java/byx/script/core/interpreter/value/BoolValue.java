@@ -6,15 +6,14 @@ public class BoolValue implements Value {
     public static final BoolValue TRUE = new BoolValue(true);
     public static final BoolValue FALSE = new BoolValue(false);
 
+    public static BoolValue of(boolean b) {
+        return b ? TRUE : FALSE;
+    }
+
     private final boolean value;
 
     private BoolValue(boolean value) {
         this.value = value;
-    }
-
-    @Override
-    public String typeId() {
-        return "bool";
     }
 
     public boolean getValue() {

@@ -32,11 +32,6 @@ public class IntegerValue implements Value {
     }
 
     @Override
-    public String typeId() {
-        return "integer";
-    }
-
-    @Override
     public Value add(Value rhs) {
         if (rhs instanceof IntegerValue) {
             return new IntegerValue(value + ((IntegerValue) rhs).getValue());
@@ -96,9 +91,9 @@ public class IntegerValue implements Value {
     @Override
     public Value lessThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return Value.of(value < ((IntegerValue) rhs).getValue());
+            return BoolValue.of(value < ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return Value.of(value < ((DoubleValue) rhs).getValue());
+            return BoolValue.of(value < ((DoubleValue) rhs).getValue());
         }
         return Value.super.lessThan(rhs);
     }
@@ -106,9 +101,9 @@ public class IntegerValue implements Value {
     @Override
     public Value lessEqualThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return Value.of(value <= ((IntegerValue) rhs).getValue());
+            return BoolValue.of(value <= ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return Value.of(value <= ((DoubleValue) rhs).getValue());
+            return BoolValue.of(value <= ((DoubleValue) rhs).getValue());
         }
         return Value.super.lessEqualThan(rhs);
     }
@@ -116,9 +111,9 @@ public class IntegerValue implements Value {
     @Override
     public Value greaterThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return Value.of(value > ((IntegerValue) rhs).getValue());
+            return BoolValue.of(value > ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return Value.of(value > ((DoubleValue) rhs).getValue());
+            return BoolValue.of(value > ((DoubleValue) rhs).getValue());
         }
         return Value.super.greaterThan(rhs);
     }
@@ -126,9 +121,9 @@ public class IntegerValue implements Value {
     @Override
     public Value greaterEqualThan(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return Value.of(value >= ((IntegerValue) rhs).getValue());
+            return BoolValue.of(value >= ((IntegerValue) rhs).getValue());
         } else if (rhs instanceof DoubleValue) {
-            return Value.of(value >= ((DoubleValue) rhs).getValue());
+            return BoolValue.of(value >= ((DoubleValue) rhs).getValue());
         }
         return Value.super.greaterEqualThan(rhs);
     }
@@ -136,16 +131,16 @@ public class IntegerValue implements Value {
     @Override
     public Value equal(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return Value.of(value == ((IntegerValue) rhs).getValue());
+            return BoolValue.of(value == ((IntegerValue) rhs).getValue());
         }
-        return Value.of(false);
+        return BoolValue.FALSE;
     }
 
     @Override
     public Value notEqual(Value rhs) {
         if (rhs instanceof IntegerValue) {
-            return Value.of(value != ((IntegerValue) rhs).getValue());
+            return BoolValue.of(value != ((IntegerValue) rhs).getValue());
         }
-        return Value.of(true);
+        return BoolValue.TRUE;
     }
 }

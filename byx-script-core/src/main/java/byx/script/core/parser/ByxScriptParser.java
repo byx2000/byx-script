@@ -1,8 +1,7 @@
 package byx.script.core.parser;
 
 import byx.script.core.interpreter.exception.ByxScriptRuntimeException;
-import byx.script.core.interpreter.value.NullValue;
-import byx.script.core.interpreter.value.Value;
+import byx.script.core.interpreter.value.*;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
 import byx.script.core.parser.ast.stmt.*;
@@ -151,16 +150,20 @@ public class ByxScriptParser {
     // 表达式
 
     // 整数字面量
-    private static final Parser<Expr> integerLiteral = integer.map(s -> new Literal(Value.of(Integer.parseInt(s))));
+    private static final Parser<Expr> integerLiteral = integer
+            .map(s -> new Literal(new IntegerValue(Integer.parseInt(s))));
 
     // 浮点数字面量
-    private static final Parser<Expr> doubleLiteral = decimal.map(s -> new Literal(Value.of(Double.parseDouble(s))));
+    private static final Parser<Expr> doubleLiteral = decimal
+            .map(s -> new Literal(new DoubleValue(Double.parseDouble(s))));
 
     // 字符串字面量
-    private static final Parser<Expr> stringLiteral = string.map(s -> new Literal(Value.of(s)));
+    private static final Parser<Expr> stringLiteral = string
+            .map(s -> new Literal(new StringValue(s)));
 
     // 布尔值字面量
-    private static final Parser<Expr> boolLiteral = bool.map(s -> new Literal(Value.of(Boolean.parseBoolean(s))));
+    private static final Parser<Expr> boolLiteral = bool
+            .map(s -> new Literal(BoolValue.of(Boolean.parseBoolean(s))));
 
     // undefined字面量
     private static final Parser<Expr> nullLiteral = null_.map(r -> new Literal(NullValue.INSTANCE));
@@ -287,15 +290,15 @@ public class ByxScriptParser {
 
     // 自增语句
     private static final Parser<Statement> preInc = skip(inc).and(assignable)
-            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Add, e, new Literal(Value.of(1)))));
+            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Add, e, new Literal(new IntegerValue(1)))));
     private static final Parser<Statement> postInc = assignable.skip(inc)
-            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Add, e, new Literal(Value.of(1)))));
+            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Add, e, new Literal(new IntegerValue(1)))));
 
     // 自减语句
     private static final Parser<Statement> preDec = skip(dec).and(assignable)
-            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Sub, e, new Literal(Value.of(1)))));
+            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Sub, e, new Literal(new IntegerValue(1)))));
     private static final Parser<Statement> postDec = assignable.skip(dec)
-            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Sub, e, new Literal(Value.of(1)))));
+            .map(e -> new Assign(e, new BinaryExpr(BinaryOp.Sub, e, new Literal(new IntegerValue(1)))));
 
     // if语句
     private static final Parser<Pair<Expr, Statement>> ifPart =
