@@ -1,5 +1,6 @@
 package byx.script.core.parser.ast;
 
+import byx.script.core.interpreter.ASTVisitor;
 import byx.script.core.parser.ast.stmt.Statement;
 
 import java.util.List;

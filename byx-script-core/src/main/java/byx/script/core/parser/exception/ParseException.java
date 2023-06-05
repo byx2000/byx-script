@@ -1,5 +1,6 @@
 package byx.script.core.parser.exception;
 
+import byx.script.core.common.FastException;
 import byx.script.core.parser.parserc.Cursor;
 
 /**
@@ -28,7 +29,7 @@ public class ParseException extends FastException {
 
     @Override
     public String getMessage() {
-        return msg != null && !msg.isBlank()
+        return (msg != null && !msg.isBlank())
                 ? String.format("parse error at row %d, col %d: %s", cursor.row(), cursor.col(), msg)
                 : String.format("parse error at row %d, col %d", cursor.row(), cursor.col());
     }

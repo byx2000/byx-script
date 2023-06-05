@@ -1,7 +1,7 @@
 package byx.script.core.parser.ast.stmt;
 
-import byx.script.core.util.Pair;
-import byx.script.core.parser.ast.ASTVisitor;
+import byx.script.core.common.Pair;
+import byx.script.core.interpreter.ASTVisitor;
 import byx.script.core.parser.ast.expr.Expr;
 
 import java.util.List;

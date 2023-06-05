@@ -1,5 +1,6 @@
 package byx.script.core.parser.exception;
 
+import byx.script.core.common.FastException;
 import byx.script.core.parser.parserc.Cursor;
 
 /**
@@ -20,10 +21,8 @@ public class ByxScriptParseException extends FastException {
 
     @Override
     public String getMessage() {
-        if (cursor != null) {
-            return String.format("syntax error: \nrow: %d, col: %d: %s", cursor.row(), cursor.col(), msg);
-        } else {
-            return String.format("syntax: \n%s", msg);
-        }
+        return (cursor != null)
+                ? String.format("syntax error: \nrow: %d, col: %d: %s", cursor.row(), cursor.col(), msg)
+                : String.format("syntax: \n%s", msg);
     }
 }

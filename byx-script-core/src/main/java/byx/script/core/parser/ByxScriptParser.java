@@ -8,7 +8,7 @@ import byx.script.core.parser.ast.stmt.*;
 import byx.script.core.parser.exception.ByxScriptParseException;
 import byx.script.core.parser.exception.ParseException;
 import byx.script.core.parser.parserc.Parser;
-import byx.script.core.util.Pair;
+import byx.script.core.common.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,6 +1,6 @@
 package byx.script.core.parser.ast.stmt;
 
-import byx.script.core.parser.ast.ASTVisitor;
+import byx.script.core.interpreter.ASTVisitor;
 
 /**
  * 跳出循环

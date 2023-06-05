@@ -1,9 +1,9 @@
-package byx.script.core.util;
+package byx.script.core.common;
 
 import java.util.Objects;
 
 /**
- * 长度为2的元组
+ * 元组
  */
 public class Pair<T, U> {
     private final T first;

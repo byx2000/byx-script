@@ -1,6 +1,6 @@
 package byx.script.core.parser.ast.expr;
 
-import byx.script.core.parser.ast.ASTVisitor;
+import byx.script.core.interpreter.ASTVisitor;
 
 import java.util.Map;
 

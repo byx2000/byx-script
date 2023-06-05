@@ -1,5 +1,6 @@
-package byx.script.core.parser.ast;
+package byx.script.core.interpreter;
 
+import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
 import byx.script.core.parser.ast.stmt.*;
 
@@ -9,6 +10,7 @@ import byx.script.core.parser.ast.stmt.*;
  * @param <C> 上下文参数类型
  */
 public interface ASTVisitor<R, C> {
+    // 语句节点
     R visit(Program node, C ctx);
     R visit(VarDeclare node, C ctx);
     R visit(Assign node, C ctx);
@@ -23,6 +25,7 @@ public interface ASTVisitor<R, C> {
     R visit(Try node, C ctx);
     R visit(Throw node, C ctx);
 
+    // 表达式节点
     R visit(Literal node, C ctx);
     R visit(ListLiteral node, C ctx);
     R visit(ObjectLiteral node, C ctx);

@@ -1,11 +1,11 @@
 package byx.script.core;
 
-import byx.script.core.interpreter.Evaluator;
+import byx.script.core.interpreter.ASTEvaluator;
 import byx.script.core.interpreter.Scope;
-import byx.script.core.interpreter.builtin.Console;
-import byx.script.core.interpreter.builtin.Math;
-import byx.script.core.interpreter.builtin.Reader;
-import byx.script.core.interpreter.builtin.Reflect;
+import byx.script.core.interpreter.value.builtin.Console;
+import byx.script.core.interpreter.value.builtin.Math;
+import byx.script.core.interpreter.value.builtin.Reader;
+import byx.script.core.interpreter.value.builtin.Reflect;
 import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.value.Value;
 import byx.script.core.parser.ByxScriptParser;
@@ -175,7 +175,7 @@ public class ByxScriptRunner {
         List<String> loadOrder = getLoadOrder(imports);
 
         // 创建求值器
-        Evaluator evaluator = new Evaluator();
+        ASTEvaluator evaluator = new ASTEvaluator();
 
         // 初始化作用域
         Scope scope = new Scope();
@@ -200,7 +200,7 @@ public class ByxScriptRunner {
         } catch (ReturnException e) {
             throw new ByxScriptRuntimeException("return statement only allow in function");
         } catch (ThrowException e) {
-            throw new ByxScriptRuntimeException("uncaught exception with value: " + e.getValue());
+            throw new ByxScriptRuntimeException("uncaught exception from script: " + e.getValue());
         } catch (Exception e) {
             throw new ByxScriptRuntimeException("unknown runtime exception: " + e.getMessage());
         }

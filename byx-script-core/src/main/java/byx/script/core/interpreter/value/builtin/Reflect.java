@@ -1,4 +1,4 @@
-package byx.script.core.interpreter.builtin;
+package byx.script.core.interpreter.value.builtin;
 
 import byx.script.core.interpreter.value.*;
 

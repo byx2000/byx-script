@@ -1,6 +1,6 @@
 package byx.script.core.parser.parserc;
 
-import byx.script.core.util.Pair;
+import byx.script.core.common.Pair;
 import byx.script.core.parser.exception.ParseException;
 
 import java.util.ArrayList;

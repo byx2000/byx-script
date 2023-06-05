@@ -5,7 +5,7 @@ import byx.script.core.parser.parserc.Cursor;
 import byx.script.core.parser.parserc.ParseResult;
 import byx.script.core.parser.parserc.Parser;
 import byx.script.core.parser.parserc.Parsers;
-import byx.script.core.util.Pair;
+import byx.script.core.common.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

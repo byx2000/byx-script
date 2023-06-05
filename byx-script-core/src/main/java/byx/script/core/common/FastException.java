@@ -1,4 +1,4 @@
-package byx.script.core.parser.exception;
+package byx.script.core.common;
 
 /**
  * 关闭异常调用栈记录，提高异常创建的速度

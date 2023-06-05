@@ -1,7 +1,7 @@
 package byx.script.core.parser.parserc;
 
 import byx.script.core.parser.exception.ParseException;
-import byx.script.core.util.Pair;
+import byx.script.core.common.Pair;
 
 import java.util.*;
 import java.util.function.Function;
@@ -248,13 +248,13 @@ public class Parsers {
      * @param parsers 解析器数组
      */
     public static Parser<Object> alt(Parser<?>... parsers) {
-        return input -> {
+        return cursor -> {
             for (Parser<?> p : parsers) {
                 try {
-                    return p.mapTo(Object.class).parse(input);
+                    return p.mapTo(Object.class).parse(cursor);
                 } catch (ParseException ignored) {}
             }
-            throw new ParseException(input, "no parser available");
+            throw new ParseException(cursor, "no parser available");
         };
     }
 

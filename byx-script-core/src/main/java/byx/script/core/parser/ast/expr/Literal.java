@@ -1,7 +1,7 @@
 package byx.script.core.parser.ast.expr;
 
 import byx.script.core.interpreter.value.Value;
-import byx.script.core.parser.ast.ASTVisitor;
+import byx.script.core.interpreter.ASTVisitor;
 
 /**
  * 字面量

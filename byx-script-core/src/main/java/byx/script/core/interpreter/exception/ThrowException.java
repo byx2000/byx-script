@@ -1,7 +1,7 @@
 package byx.script.core.interpreter.exception;
 
 import byx.script.core.interpreter.value.Value;
-import byx.script.core.parser.exception.FastException;
+import byx.script.core.common.FastException;
 
 public class ThrowException extends FastException {
     private final Value value;

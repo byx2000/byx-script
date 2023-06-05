@@ -2,11 +2,10 @@ package byx.script.core.interpreter;
 
 import byx.script.core.interpreter.exception.*;
 import byx.script.core.interpreter.value.*;
-import byx.script.core.parser.ast.ASTVisitor;
 import byx.script.core.parser.ast.Program;
 import byx.script.core.parser.ast.expr.*;
 import byx.script.core.parser.ast.stmt.*;
-import byx.script.core.util.Pair;
+import byx.script.core.common.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * 抽象语法树求值器
  */
-public class Evaluator implements ASTVisitor<Value, Scope> {
+public class ASTEvaluator implements ASTVisitor<Value, Scope> {
     /**
      * 对Program节点求值
      * @param program Program节点
