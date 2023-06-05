@@ -123,7 +123,7 @@ public class StandardLibraryTest {
                 List.sort(list2, (a, b) => b - a)
                 Console.println(list2)
                 
-                function Student(name, age, score) {
+                func Student(name, age, score) {
                     return {
                         name: name,
                         age: age,
@@ -289,7 +289,7 @@ public class StandardLibraryTest {
         verify("""
                 import map
                 
-                function twoSum(nums, target) {
+                func twoSum(nums, target) {
                     var map = Map()
                     for (var i = 0; i < nums.length(); ++i) {
                         if (map.containsKey(target - nums[i])) {

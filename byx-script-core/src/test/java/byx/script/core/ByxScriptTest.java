@@ -89,7 +89,7 @@ public class ByxScriptTest {
     }
 
     @Test
-    public void testFunctionLiteral() {
+    public void testfuncLiteral() {
         verify("""
                 var f1 = () => 123
                 Console.println(f1())
@@ -159,7 +159,7 @@ public class ByxScriptTest {
     }
 
     @Test
-    public void testFunctionCallImmediately() {
+    public void testfuncCallImmediately() {
         verify("""
                 Console.println((() => 12345)())
                 Console.println((m => m + 6)(10))
@@ -731,11 +731,11 @@ public class ByxScriptTest {
         verify("""
                 var x = 0
                 var y = 0
-                function f1() {
+                func f1() {
                     x = x + 1
                     return true
                 }
-                function f2() {
+                func f2() {
                     y = y + 1
                     return false
                 }
@@ -840,7 +840,7 @@ public class ByxScriptTest {
                 1003 1004
                 """);
         verify("""
-                function getLevel(score) {
+                func getLevel(score) {
                     if (85 < score && score <= 100) {
                         return 'excellent'
                     } else if (75 < score && score <= 85) {
@@ -1413,7 +1413,7 @@ public class ByxScriptTest {
     @Test
     public void testReturn() {
         verify("""
-                function fun() {
+                func fun() {
                     Console.println('hello')
                     return;
                     Console.println('hi')
@@ -1428,7 +1428,7 @@ public class ByxScriptTest {
     @Test
     public void testEqualOverload() {
         verify("""
-                function Pair1(first, second) {
+                func Pair1(first, second) {
                     return {
                         first, second,
                         _equal(p) {
@@ -1444,7 +1444,7 @@ public class ByxScriptTest {
                 Console.println(p1 == p3)
                 Console.println(p2 != p3)
                 
-                function Pair2(first, second) {
+                func Pair2(first, second) {
                     return {first, second}
                 }
                 
@@ -1467,7 +1467,7 @@ public class ByxScriptTest {
     @Test
     public void testOpOverload() {
         verify("""
-                function Vector2(x, y) {
+                func Vector2(x, y) {
                     return {
                         x, y,
                         _add(v) {
@@ -1510,7 +1510,7 @@ public class ByxScriptTest {
     @Test
     public void testTry() {
         verify("""
-                function testException(f) {
+                func testException(f) {
                     try {
                         f()
                     } catch (e) {

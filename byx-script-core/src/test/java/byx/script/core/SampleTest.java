@@ -9,14 +9,14 @@ public class SampleTest {
     public void testBinaryTreeTraverse() {
         verify("""
                 // 二叉树定义
-                function TreeNode(val, left, right) {
+                func TreeNode(val, left, right) {
                     return {val, left, right}
                 }
                                 
                 // 前序遍历
-                function preorderTraverse(root) {
+                func preorderTraverse(root) {
                     var result = []
-                    function doTraverse(root) {
+                    func doTraverse(root) {
                         if (root == null) {
                             return
                         }
@@ -29,9 +29,9 @@ public class SampleTest {
                 }
                                 
                 // 中序遍历
-                function inorderTraverse(root) {
+                func inorderTraverse(root) {
                     var result = []
-                    function doTraverse(root) {
+                    func doTraverse(root) {
                         if (root == null) {
                             return
                         }
@@ -44,9 +44,9 @@ public class SampleTest {
                 }
                                 
                 // 后序遍历
-                function postorderTraverse(root) {
+                func postorderTraverse(root) {
                     var result = []
-                    function doTraverse(root) {
+                    func doTraverse(root) {
                         if (root == null) {
                             return
                         }
@@ -59,7 +59,7 @@ public class SampleTest {
                 }
                                 
                 // 层序遍历
-                function levelTraverse(root) {
+                func levelTraverse(root) {
                     var result = []
                     var queue = [root]
                     while (!queue.isEmpty()) {
@@ -96,7 +96,7 @@ public class SampleTest {
     public void testCounter() {
         verify("""
                 // 简单计数器
-                function SimpleCounter() {
+                func SimpleCounter() {
                     var cnt = 0
                     return () => {
                         cnt = cnt + 1
@@ -118,7 +118,7 @@ public class SampleTest {
                 Console.println(c2())
                                 
                 // 计数器
-                function Counter(init) {
+                func Counter(init) {
                     var cnt = init
                     return {
                         // 获取当前计数值
@@ -176,7 +176,7 @@ public class SampleTest {
     @Test
     public void testFactorial() {
         verify("""
-                function factorial(n) {
+                func factorial(n) {
                     if (n == 1) {
                         return 1
                     }
@@ -199,7 +199,7 @@ public class SampleTest {
                     return fib1(n - 1) + fib1(n - 2)
                 }
                                 
-                function fib2(n) {
+                func fib2(n) {
                     if (n == 1 || n == 2) {
                         return 1
                     }
@@ -221,7 +221,7 @@ public class SampleTest {
     @Test
     public void testMatrixTranspose() {
         verify("""
-                function transpose(matrix) {
+                func transpose(matrix) {
                     for (var i = 0; i < matrix.length(); i = i + 1) {
                         for (var j = i; j < matrix.length(); j = j + 1) {
                             var t = matrix[i][j]
@@ -251,10 +251,10 @@ public class SampleTest {
     @Test
     public void testMergeSort() {
         verify("""
-                function MergeSort(nums) {
+                func MergeSort(nums) {
                     var temp = nums.copy()
 
-                    function merge(left, mid, right) {
+                    func merge(left, mid, right) {
                         var i = left
                         var j = mid + 1
                        
@@ -279,7 +279,7 @@ public class SampleTest {
                         }
                     }
                    
-                    function sort(left, right) {
+                    func sort(left, right) {
                         if (left >= right) {
                             return
                         }
@@ -303,8 +303,8 @@ public class SampleTest {
     @Test
     public void testNumberOfIsland() {
         verify("""
-                function numberOfIslands(map) {
-                    function dfs(r, c) {
+                func numberOfIslands(map) {
+                    func dfs(r, c) {
                         if (r < 0 || r >= map.length() || c < 0 || c >= map[r].length()) {
                             return
                         }
@@ -354,8 +354,8 @@ public class SampleTest {
     @Test
     public void testPalindrome() {
         verify("""
-                function LongestPalindrome1(s) {
-                    function isPalindrome(i, j) {
+                func LongestPalindrome1(s) {
+                    func isPalindrome(i, j) {
                         if (i == j) {
                             return true
                         } else if (i + 1 == j) {
@@ -384,7 +384,7 @@ public class SampleTest {
                 Console.println(LongestPalindrome1('dsfasfdsfadsfasdgfdadfasdgdsgasdfgasgsfd'))
                 Console.println(LongestPalindrome1('asdasbvabsbasbasdabbabaabsdsbaabaabbababaddsbfbaba'))
                                 
-                function LongestPalindrome2(s) {
+                func LongestPalindrome2(s) {
                     var cache = []
                     for (var i = 0; i < s.length(); ++i) {
                         cache.addLast([])
@@ -393,7 +393,7 @@ public class SampleTest {
                         }
                     }
                      
-                    function isPalindrome(i, j) {
+                    func isPalindrome(i, j) {
                         if (cache[i][j] != null) {
                             return cache[i][j]
                         }
@@ -442,7 +442,7 @@ public class SampleTest {
     @Test
     public void testPermutation() {
         verify("""
-                function permutation(nums) {
+                func permutation(nums) {
                     var result = []
                                
                     var book = []
@@ -451,7 +451,7 @@ public class SampleTest {
                     }
                                
                     var p = []
-                    function dfs(index) {
+                    func dfs(index) {
                         if (index == nums.length()) {
                             result.addLast(p.copy())
                             return
@@ -490,13 +490,13 @@ public class SampleTest {
     @Test
     public void testQuickSort() {
         verify("""
-                function swap(nums, i, j) {
+                func swap(nums, i, j) {
                     var t = nums[i]
                     nums[i] = nums[j]
                     nums[j] = t
                 }
                                 
-                function partition(nums, left, right) {
+                func partition(nums, left, right) {
                     var i = left + 1
                     var j = right
                     while (i <= j) {
@@ -510,7 +510,7 @@ public class SampleTest {
                     return j
                 }
                                 
-                function qsort(nums, left, right) {
+                func qsort(nums, left, right) {
                     if (left >= right) {
                         return
                     }
@@ -537,7 +537,7 @@ public class SampleTest {
     public void testReverseLinkedList() {
         verify("""
                 // 链表定义
-                function LinkedList(val, next) {
+                func LinkedList(val, next) {
                     return {
                         val: val,
                         next: next
@@ -545,9 +545,9 @@ public class SampleTest {
                 }
                                 
                 // 将链表转换为list
-                function toList(head) {
+                func toList(head) {
                     var result = []
-                    function traverse(head) {
+                    func traverse(head) {
                         if (head == null) {
                             return
                         }
@@ -559,7 +559,7 @@ public class SampleTest {
                 }
                                 
                 // 反转链表
-                function reverse(head) {
+                func reverse(head) {
                     if (head == null || head.next == null) {
                         return head
                     }
@@ -582,7 +582,7 @@ public class SampleTest {
     @Test
     public void testReverseList() {
         verify("""
-                function reverse(nums) {
+                func reverse(nums) {
                     var i = 0;
                     var j = nums.length() - 1;
                     while (i < j) {
@@ -609,7 +609,7 @@ public class SampleTest {
     @Test
     public void testSelectionSort() {
         verify("""
-                function SelectionSort(nums) {
+                func SelectionSort(nums) {
                     for (var i = 0; i < nums.length(); i = i + 1) {
                         for (var j = i + 1; j < nums.length(); j = j + 1) {
                             if (nums[j] < nums[i]) {
@@ -635,7 +635,7 @@ public class SampleTest {
     @Test
     public void testStack() {
         verify("""
-                function Stack() {
+                func Stack() {
                     var elems = []
                     return {
                         push: e => elems.addLast(e),
@@ -672,7 +672,7 @@ public class SampleTest {
     @Test
     public void testStringToInt() {
         verify("""
-                function stringToInt(s) {
+                func stringToInt(s) {
                     var result = 0
                     for (var i = 0; i < s.length(); ++i) {
                         var d = s.codeAt(i) - '0'.codeAt(0)
@@ -696,10 +696,10 @@ public class SampleTest {
     @Test
     public void testSubset() {
         verify("""
-                function SubSet(nums) {
+                func SubSet(nums) {
                     var result = []
                                
-                    function dfs(index, set) {
+                    func dfs(index, set) {
                         if (index == nums.length()) {
                             result.addLast(set.copy())
                             return
@@ -735,7 +735,7 @@ public class SampleTest {
     @Test
     public void testTwoSum() {
         verify("""
-                function twoSum(nums, target) {
+                func twoSum(nums, target) {
                     for (var i = 0; i < nums.length(); ++i) {
                         for (var j = i + 1; j < nums.length(); ++j) {
                             if (nums[i] + nums[j] == target) {

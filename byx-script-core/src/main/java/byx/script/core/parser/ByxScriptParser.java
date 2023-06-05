@@ -49,7 +49,7 @@ public class ByxScriptParser {
 
     // 浮点数
     private static final Parser<String> decimal = seq(digits, ch('.'), digits)
-            .map(rs -> "" + rs.get(0) + rs.get(1) + rs.get(2))
+            .map(rs -> String.valueOf(rs.get(0)) + rs.get(1) + rs.get(2))
             .surround(ignorable);
 
     // 字符串
@@ -114,7 +114,7 @@ public class ByxScriptParser {
     private static final Parser<String> break_ = str("break").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> continue_ = str("continue").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> return_ = str("return").notFollow(identifierPart).surround(ignorable);
-    private static final Parser<String> function_ = str("function").notFollow(identifierPart).surround(ignorable);
+    private static final Parser<String> func_ = str("func").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> null_ = str("null").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> try_ = str("try").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> catch_ = str("catch").notFollow(identifierPart).surround(ignorable);
@@ -124,7 +124,7 @@ public class ByxScriptParser {
 
     private static final Parser<String> keywords = oneOf(
             import_, var_, if_, else_, for_, while_,
-            break_, continue_, return_, function_, null_,
+            break_, continue_, return_, func_, null_,
             try_, catch_, finally_, throw_
     );
 
@@ -267,7 +267,7 @@ public class ByxScriptParser {
             expect(rp).value(Collections.emptyList()),
             identifier_fatal.and(skip(comma).and(identifier_fatal).many()).map(ByxScriptParser::mapToList)
     );
-    private static final Parser<Statement> funcDeclare = skip(function_)
+    private static final Parser<Statement> funcDeclare = skip(func_)
             .and(identifier_fatal)
             .skip(lp_fatal)
             .and(paramList)

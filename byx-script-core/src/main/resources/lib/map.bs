@@ -2,7 +2,7 @@
  * 哈希表
  * capacity: 哈希桶数量
  */
-function Map(capacity) {
+func Map(capacity) {
     if (capacity == null) {
         capacity = 10
     }
@@ -14,11 +14,11 @@ function Map(capacity) {
 
     var size = 0
 
-    function Pair(key, value) {
+    func Pair(key, value) {
         return {key, value}
     }
 
-    function getHashCode(obj) {
+    func getHashCode(obj) {
         var hashCode = Reflect.hashCode(obj)
         if (hashCode < 0) {
             return -hashCode

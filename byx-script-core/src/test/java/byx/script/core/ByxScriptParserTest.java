@@ -29,16 +29,16 @@ public class ByxScriptParserTest {
 
     @Test
     public void testFuncDeclareException() {
-        verifyException(() -> ByxScriptParser.parse("function "), "expect identifier");
-        verifyException(() -> ByxScriptParser.parse("function fun"), "expect '('");
-        verifyException(() -> ByxScriptParser.parse("function fun(a, b"), "expect ')'");
-        verifyException(() -> ByxScriptParser.parse("function fun(a, b) return 100"), "expect '{'");
-        verifyException(() -> ByxScriptParser.parse("function fun(a, b) {return 100"), "expect '}'");
-        verifyException(() -> ByxScriptParser.parse("function (a, b) {return 100}"), "expect identifier");
-        verifyException(() -> ByxScriptParser.parse("function fun(a, , b)"), "expect identifier");
-        verifyException(() -> ByxScriptParser.parse("function fun(, a, b)"), "expect identifier");
-        verifyException(() -> ByxScriptParser.parse("function fun(+-)"), "expect identifier");
-        verifyException(() -> ByxScriptParser.parse("function fun(a, b, )"), "expect identifier");
-        verifyException(() -> ByxScriptParser.parse("function fun(a, 123, b)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func "), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func fun"), "expect '('");
+        verifyException(() -> ByxScriptParser.parse("func fun(a, b"), "expect ')'");
+        verifyException(() -> ByxScriptParser.parse("func fun(a, b) return 100"), "expect '{'");
+        verifyException(() -> ByxScriptParser.parse("func fun(a, b) {return 100"), "expect '}'");
+        verifyException(() -> ByxScriptParser.parse("func (a, b) {return 100}"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func fun(a, , b)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func fun(, a, b)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func fun(+-)"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func fun(a, b, )"), "expect identifier");
+        verifyException(() -> ByxScriptParser.parse("func fun(a, 123, b)"), "expect identifier");
     }
 }
