@@ -106,7 +106,7 @@ public class ByxScriptParser {
 
     // 关键字
     private static final Parser<String> import_ = str("import").notFollow(identifierPart).surround(ignorable);
-    public static final Parser<String> var_ = str("var").notFollow(identifierPart).surround(ignorable);
+    private static final Parser<String> var_ = str("var").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> if_ = str("if").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> else_ = str("else").notFollow(identifierPart).surround(ignorable);
     private static final Parser<String> for_ = str("for").notFollow(identifierPart).surround(ignorable);
